@@ -7,7 +7,7 @@ import { NewServerDTO } from "./bot.dto";
 export class BotController {
     @Post("/new_server")
     async botJoinedServer(@Req() req: Request, @Body() body: NewServerDTO, @Res() res: Response) {
-        const check_previous = await prisma.guild.findMany({
+        const check_previous = await prisma.guilds.findMany({
             where: {
                 "guild_id": body.guild_id
             },
@@ -16,7 +16,7 @@ export class BotController {
             return res.status(HttpStatus.FOUND).json({"message": "Guild already registered!"});
         }
 
-        const insert = await prisma.guild.create({
+        const insert = await prisma.guilds.create({
             "data": {
                 "guid_name": body.guild_name,
                 "guild_id": body.guild_id,

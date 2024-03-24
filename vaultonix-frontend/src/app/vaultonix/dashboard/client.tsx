@@ -1,21 +1,28 @@
 "use client"
 
+import { getMyGuilds, getVaultonixActiveGuilds } from "@/api/discord/discord.api";
+import { GuildDTO } from "@/api/discord/discord.dto";
+import { DISCORD_INVITE } from "@/api/resources";
 import { getUserFromToken } from "@/api/user/user.api";
 import { UserDTO } from "@/api/user/user.dto";
-import GuildSelector from "@/components/guild-selector/guild-selector";
+import GuildPreview from "@/components/guild-preview/guild-preview";
+import guild_style from "@/components/guild-preview/guild-preview.module.scss";
 import Header from "@/components/header/header";
 import Loading from "@/components/loading/loading";
 import { getCookie } from "@/utils/cookie";
+import Link from "next/link";
 import { useEffect, useState } from "react";
+import { act } from "react-dom/test-utils";
 
 const DashboardClient = () => {
 	const [loading, setLoading] = useState<boolean>(true);
 	const [user, setUser] = useState<UserDTO | null>(null);
-	const [current_guild, setCurrentGuild] = useState<string>(""); 
+	const [guilds, setGuilds] = useState<GuildDTO[]>([]);
+	const [active_guilds, setActiveGuilds] = useState<GuildDTO[]>([]);
 
 	useEffect(() => {
 		(async () => {
-			if (typeof(window) === undefined) {
+			if (typeof (window) === undefined) {
 				return;
 			}
 
@@ -26,7 +33,11 @@ const DashboardClient = () => {
 			}
 
 			const u = await getUserFromToken(token);
+			const gs = await getMyGuilds();
+			const ags = await getVaultonixActiveGuilds(gs);
+
 			setUser(u);
+			setActiveGuilds(ags);
 			setLoading(false);
 		})();
 	}, []);
@@ -35,22 +46,44 @@ const DashboardClient = () => {
 		return (<Loading />);
 	}
 
-	const changeCurrentGuild = (guild_id: string) => {
-		setCurrentGuild(guild_id);
-	}
-
 	return (
 		<>
 			<Header user={user} />
 			<main className="container">
 				<div className="grid">
 					<div className="item">
-						<span style={{"fontWeight": "100"}}>Logged in as {user.username}</span>
+						<span style={{ "fontWeight": "100" }}>Logged in as {user.username}</span>
 						<h1>Dashboard</h1>
-						<GuildSelector on_guild_select={changeCurrentGuild} />
+						<span>Here you can manage all your servers, their configurations, members, and view other useful information</span>
 					</div>
 					<div className="item">
-						{current_guild.length <= 0 && <span>No Guild Selected!</span>}
+						{active_guilds.length <= 0
+							? <>
+								<h3>You aren't in any servers that are Vaultonix Active....</h3>
+								{DISCORD_INVITE &&
+									<Link href={DISCORD_INVITE} style={{
+										"fontWeight": "800",
+										"textTransform": "uppercase",
+										"padding": "1rem",
+										"borderRadius": "0.5rem",
+										"backgroundColor": "var(--primary-300)",
+										"color": "inherit !important",
+										"width": "fit-content"
+									}} target="_blank">
+										Invite Vaultonix to your Server
+									</Link>
+								}
+							</>
+							: <div className={guild_style.guilds}>
+								{active_guilds.map((active_guild: GuildDTO, index: number) => {
+									return (
+										<Link href={`/vaultonix/dashboard/${active_guild.id}`}>
+											<GuildPreview guild={active_guild} />
+										</Link>
+									);
+								})}
+							</div>
+						}
 					</div>
 				</div>
 			</main>

@@ -12,7 +12,7 @@ export class UserController {
 	async getPersonalUser(@Req() request: Request, @Res() response: Response) {
 		try {
 			const user_token = request.headers.authorization
-			const user = await prisma.user.findFirst({
+			const user = await prisma.users.findFirst({
 				"where": {
 					"token": user_token || ""
 				}
@@ -53,7 +53,7 @@ export class UserController {
 				return response.redirect(FRONTEND_HOST + "/vaultonix/login");
 			}
 
-			const user_check = await prisma.user.findMany({
+			const user_check = await prisma.users.findMany({
 				where: {
 					"discord_id": user_request.data.id
 				}
@@ -63,7 +63,7 @@ export class UserController {
 			}
 
 			const token = SHA256((Math.random() * Number.MAX_SAFE_INTEGER).toString() + new Date().toISOString() + user_request.data.id).toString()
-			const insert = await prisma.user.create({
+			const insert = await prisma.users.create({
 				"data": {
 					"avatar_url": DISCORD_CDN + `/avatars/${user_request.data.id}/${user_request.data.avatar}`,
 					"username": user_request.data.global_name,

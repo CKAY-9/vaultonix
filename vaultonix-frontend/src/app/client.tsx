@@ -38,9 +38,11 @@ const IndexClient = (props: {
 	}, []);
 	return (
 		<>
-			<Header user={props.user} />
 			<div style={{ "display": loading ? "block" : "none" }}>
 				<Loading />
+			</div>
+			<div style={{ "display": loading ? "none" : "grid" }}>
+				<Header user={props.user} />
 			</div>
 			<div className={style.splash} id="splash" style={{ "display": loading ? "none" : "grid" }}>
 				<div className={style.content}>

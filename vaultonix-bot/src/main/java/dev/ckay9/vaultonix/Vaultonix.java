@@ -1,6 +1,7 @@
 package dev.ckay9.vaultonix;
 
 import dev.ckay9.vaultonix.Events.GuildJoin;
+import dev.ckay9.vaultonix.Events.MemberJoin;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
@@ -30,7 +31,7 @@ public class Vaultonix {
         builder.disableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE);
         builder.setBulkDeleteSplittingEnabled(false);
 
-        builder.addEventListeners(new GuildJoin());
+        builder.addEventListeners(new GuildJoin(), new MemberJoin());
 
         builder.setActivity(Activity.listening("TO KENETH CARSON"));
 

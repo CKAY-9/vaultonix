@@ -1,0 +1,26 @@
+.guilds {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 300px));
+}
+
+.guild_preview {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background-color: var(--primary-700);
+    border-radius: 0.5rem;
+}
+
+.icon {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+}
+
+.name {
+    font-size: 1.5rem;
+}

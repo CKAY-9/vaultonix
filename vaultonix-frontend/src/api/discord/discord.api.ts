@@ -2,6 +2,23 @@ import axios, { AxiosResponse } from "axios";
 import { GuildDTO } from "./discord.dto";
 import { API_URL, DISCORD_API } from "../resources";
 
+export const getGuildFromID = async (guild_id: string): Promise<GuildDTO | null> => {
+    if (typeof(window) === undefined) return null;
+    try {
+        const request: AxiosResponse<GuildDTO> = await axios({
+            "url": DISCORD_API + `/guilds/${guild_id}`,
+            "method": "GET",
+            "headers": {
+                "Authorization": `Bearer ${window.sessionStorage.getItem("discord_token")}`
+            }
+        });
+        return request.data;
+    } catch (ex) {
+        console.log(ex);
+        return null;
+    }
+}
+
 export const getMyGuilds = async (): Promise<GuildDTO[]> => {
     if (typeof(window) === undefined) return [];
     try {

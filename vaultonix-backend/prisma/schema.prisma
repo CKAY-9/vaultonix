@@ -13,7 +13,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Guild {
+model Guilds {
   id Int @id @default(autoincrement())
   guild_owner String
   guid_name String
@@ -28,7 +28,7 @@ model GuildSettings {
   join_roles String[] @default([])
 }
 
-model GuildUser {
+model GuildUsers {
   id Int @id @default(autoincrement())
   guild_id String 
   inventory String @default("{}")
@@ -37,7 +37,7 @@ model GuildUser {
   credits Int @default(0)
 }
 
-model User {
+model Users {
   id Int @id @default(autoincrement())
   discord_id String
   token String 

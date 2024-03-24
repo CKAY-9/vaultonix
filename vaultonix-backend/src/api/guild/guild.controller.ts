@@ -8,7 +8,7 @@ export class GuildController {
 	@Get("/registered")
 	async isGuildRegistered(@Req() request: Request, @Query() query: GuildIDDTO, @Res() response: Response) {
 		try {
-			const guild = await prisma.guild.findFirst({
+			const guild = await prisma.guilds.findFirst({
 				where: {
 					"guild_id": query.guild_id || ""
 				}
