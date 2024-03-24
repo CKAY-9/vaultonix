@@ -1,0 +1,165 @@
+"use client"
+
+import { getUserFromToken } from "@/api/user/user.api";
+import { UserDTO } from "@/api/user/user.dto";
+import Loading from "@/components/loading/loading";
+import { getCookie } from "@/utils/cookie";
+import { useEffect, useState } from "react";
+import style from "./app.module.scss";
+import Image from "next/image";
+import Link from "next/link";
+import Header from "@/components/header/header";
+import { GuildDTO } from "@/api/discord/discord.dto";
+import { getMyGuilds, getVaultonixActiveGuilds } from "@/api/discord/discord.api";
+
+const VaultonixClient = () => {
+	const [user, setUser] = useState<UserDTO | null>(null);
+	const [loadingUser, setLoadingUser] = useState<boolean>(true);
+	const [guilds, setGuilds] = useState<GuildDTO[]>([]);
+	const [active_guilds, setActiveGuilds] = useState<GuildDTO[]>([]);
+
+	useEffect(() => {
+		(async () => {
+			if (typeof (window) === undefined) {
+				return;
+			}
+
+			const discord_token = window.sessionStorage.getItem("discord_token");
+			const user_token = getCookie("user_token");
+			if (discord_token === null || user_token === null || user_token === undefined) {
+				window.location.href = "/vaultonix/login";
+			}
+
+			const u = await getUserFromToken(user_token as string);
+			if (u === null) {
+				window.location.href = "/vaultonix/login";
+			}
+
+			const gs = await getMyGuilds();
+			const ags = await getVaultonixActiveGuilds(gs);
+			console.log(gs, ags);
+
+			setUser(u);
+			setGuilds(gs);
+			setActiveGuilds(ags);
+			setLoadingUser(false);
+		})();
+	}, [])
+
+	if (loadingUser || user === null) {
+		return (<Loading />);
+	}
+
+	return (
+		<>
+			<Image
+				src="/Logo.png"
+				alt="Logo"
+				sizes="100%"
+				width={0}
+				height={0}
+				style={{ "width": "10rem", "height": "auto", "position": "fixed", "top": "10vh", "left": "2vw", "transform": "rotate(-10deg)" }}
+			/>
+			<Image
+				src="/Logo.png"
+				alt="Logo"
+				sizes="100%"
+				width={0}
+				height={0}
+				style={{ "width": "10rem", "height": "auto", "position": "fixed", "top": "75vh", "left": "2vw", "transform": "rotate(15deg)" }}
+			/>
+			<Image
+				src="/Logo.png"
+				alt="Logo"
+				sizes="100%"
+				width={0}
+				height={0}
+				style={{ "width": "10rem", "height": "auto", "position": "fixed", "top": "20vh", "left": "88vw", "transform": "rotate(15deg)" }}
+			/>
+			<Image
+				src="/Logo.png"
+				alt="Logo"
+				sizes="100%"
+				width={0}
+				height={0}
+				style={{ "width": "10rem", "height": "auto", "position": "fixed", "top": "80vh", "left": "88vw", "transform": "rotate(-5deg)" }}
+			/>
+			<Header user={user} />
+			<main className="container">
+				<div className={style.grid} style={{ "gridTemplateColumns": "70% auto" }}>
+					<div className={style.item}>
+						<Image
+							src={user.avatar_url}
+							alt="Discord PFP"
+							sizes="100%"
+							width={0}
+							height={0}
+							className={style.pfp}
+						/>
+						<section style={{ "display": "flex", "alignItems": "center", "gap": "1rem" }}>
+							<h1>Hello, {user.username}</h1>
+							<Image
+								src="/wave.svg"
+								alt="Stats"
+								sizes="100%"
+								width={0}
+								height={0}
+								style={{ "width": "3rem", "height": "3rem", "filter": "invert(1)" }}
+							/>
+						</section>
+					</div>
+					<div className={style.item}>
+						<section style={{ "display": "flex", "alignItems": "center", "gap": "0.5rem" }}>
+							<h2>Latest News</h2>
+							<Image
+								src="/news.svg"
+								alt="Stats"
+								sizes="100%"
+								width={0}
+								height={0}
+								style={{ "width": "2rem", "height": "2rem", "filter": "invert(1)" }}
+							/>
+						</section>
+						<div style={{ "maxHeight": "100%", "overflowY": "auto" }}>
+							<Link href="/news">
+								<div className={style.news}>Update v1.0 - Initial Release</div>
+							</Link>
+						</div>
+					</div>
+				</div>
+				<div className={style.grid} style={{ "gridTemplateColumns": "100%" }}>
+					<div className={style.item} style={{ "flexDirection": "row" }}>
+						<Link href="/vaultonix/dashboard">Dashboard</Link>
+						<Link href="/vaultonix/item-store">Item Store</Link>
+						<Link href="/vaultonix/settings">Settings</Link>
+					</div>
+				</div>
+				<div className={style.grid} style={{ "gridTemplateColumns": "auto 75%" }}>
+					<div className={style.item} style={{ "gap": "0" }}>
+						<section style={{ "display": "flex", "alignItems": "center", "gap": "0.5rem" }}>
+							<h3>Statistics</h3>
+							<Image
+								src="/stats.svg"
+								alt="Stats"
+								sizes="100%"
+								width={0}
+								height={0}
+								style={{ "width": "2rem", "height": "2rem", "filter": "invert(1)" }}
+							/>
+						</section>
+						<section style={{ "display": "flex", "flexDirection": "column" }}>
+							<span>Server Count: {guilds.length}</span>
+							<span>Vaultonix-Active Servers: {active_guilds.length}</span>
+							<span>Vaultonix Economy: $0</span>
+						</section>
+					</div>
+					<div className={style.item} style={{ "flexDirection": "row" }}>
+
+					</div>
+				</div>
+			</main>
+		</>
+	);
+}
+
+export default VaultonixClient;

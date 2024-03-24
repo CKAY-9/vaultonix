@@ -1,0 +1,14 @@
+.header {
+    display: flex;
+    padding: 1rem;
+    background-color: var(--primary-700);
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    z-index: 999;
+
+    section {
+        display: flex;
+        gap: 1rem;
+    }
+}

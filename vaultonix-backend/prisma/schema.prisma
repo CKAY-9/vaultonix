@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Guild {
+  id Int @id @default(autoincrement())
+  guild_owner String
+  guid_name String
+  guild_id String
+}
+
+model GuildSettings {
+  id Int @id @default(autoincrement())
+  guild_id String
+  global_stats Boolean @default(false)
+  starting_credits Int @default(500)
+  join_roles String[] @default([])
+}
+
+model GuildUser {
+  id Int @id @default(autoincrement())
+  guild_id String 
+  inventory String @default("{}")
+  level Int @default(1)
+  user_id String
+  credits Int @default(0)
+}
+
+model User {
+  id Int @id @default(autoincrement())
+  discord_id String
+  token String 
+  username String
+  avatar_url String
+  joined DateTime @default(now())
+  supporter Boolean @default(false)
+}
