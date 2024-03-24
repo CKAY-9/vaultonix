@@ -29,7 +29,7 @@ const VaultonixClient = () => {
 
 			const discord_token = window.sessionStorage.getItem("discord_token");
 			const user_token = getCookie("user_token");
-			if (discord_token === null || user_token === null || user_token === undefined) {
+			if (discord_token === null || user_token === null) {
 				window.location.href = "/vaultonix/login";
 			}
 

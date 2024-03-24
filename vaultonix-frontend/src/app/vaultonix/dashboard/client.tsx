@@ -28,8 +28,8 @@ const DashboardClient = () => {
 
 			const discord = window.sessionStorage.getItem("discord_token");
 			const token = getCookie("user_token");
-			if (discord === null || token === null || token === undefined) {
-				window.location.href = "/vaultonix/login"
+			if (discord === null || token === null) {
+				return window.location.href = "/vaultonix/login"
 			}
 
 			const u = await getUserFromToken(token);
