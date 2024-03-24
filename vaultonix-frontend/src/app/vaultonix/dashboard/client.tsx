@@ -46,6 +46,22 @@ const DashboardClient = () => {
 		return (<Loading />);
 	}
 
+	if (active_guilds.length <= 0) {
+		return (
+			<>
+				<Header user={user} />
+				<main className="container"></main>
+				<div className="grid">
+					<div className="item">
+						<span style={{ "fontWeight": "100" }}>Logged in as {user.username}</span>
+						<h1>Dashboard</h1>
+						<span>You have no servers that are active with Vaultonix :(</span>
+					</div>
+				</div>
+			</>
+		)
+	}
+
 	return (
 		<>
 			<Header user={user} />

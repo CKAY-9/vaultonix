@@ -51,7 +51,7 @@ export const getVaultonixActiveGuilds = async (guilds: GuildDTO[]) => {
                 guildsWithVaultonix.push(g);
             }
         } catch (ex) {
-            console.log("Failed...")
+            
         }
     }
     return guildsWithVaultonix;

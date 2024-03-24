@@ -6,7 +6,6 @@ export const getUserFromToken = async (token: string | null | undefined) => {
         return null;
     }
     try {
-        console.log(API_URL)
         const request = await axios({
             "url": API_URL + "/user",
             "method": "GET",

@@ -12,9 +12,9 @@ const LoginClient = () => {
 	const token = search_params.get("token");
 	const discord = search_params.get("discord");
 	if (token !== null && discord !== null) {
-	  setCookie("user_token", token, 999);
+		setCookie("user_token", token, 999);
 		window.sessionStorage.setItem("discord_token", discord);
-	  window.location.href = "/vaultonix"
+		window.location.href = "/vaultonix"
 	}
 
 	return (
@@ -33,7 +33,7 @@ const LoginClient = () => {
 							<h4>Login with Discord</h4>
 						</Link>
 					}
-					<Link href="/" style={{"background": "none", "padding": "0"}}>Back</Link>
+					<Link href="/" style={{ "background": "none", "padding": "0" }}>Back</Link>
 				</div>
 			</div>
 		</>

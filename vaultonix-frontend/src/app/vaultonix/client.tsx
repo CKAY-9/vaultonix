@@ -23,6 +23,9 @@ const VaultonixClient = () => {
 			if (typeof (window) === undefined) {
 				return;
 			}
+			if (typeof (document) === undefined) {
+				return;
+			}
 
 			const discord_token = window.sessionStorage.getItem("discord_token");
 			const user_token = getCookie("user_token");
@@ -37,7 +40,6 @@ const VaultonixClient = () => {
 
 			const gs = await getMyGuilds();
 			const ags = await getVaultonixActiveGuilds(gs);
-			console.log(gs, ags);
 
 			setUser(u);
 			setGuilds(gs);
