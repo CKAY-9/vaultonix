@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import LoginClient from "./client";
+import { Suspense } from "react";
 
 export const generateMetadata = (): Metadata => {
 	return {
@@ -10,7 +11,9 @@ export const generateMetadata = (): Metadata => {
 const LoginPage = () => {
 	return (
 		<>
-			<LoginClient />
+			<Suspense>
+				<LoginClient />
+			</Suspense>
 		</>
 	);
 }
