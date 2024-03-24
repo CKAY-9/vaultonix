@@ -38,7 +38,7 @@ const GuildDashboardClient = (props: {
 			setGuild(g);
 			setLoading(false);
 		})();
-	}, []);
+	}, [props.guild_id]);
 
 	if (loading || user === null) {
 		return (<Loading />);

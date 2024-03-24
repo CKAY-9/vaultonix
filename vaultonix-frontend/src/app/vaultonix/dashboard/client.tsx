@@ -59,7 +59,7 @@ const DashboardClient = () => {
 					<div className="item">
 						{active_guilds.length <= 0
 							? <>
-								<h3>You aren't in any servers that are Vaultonix Active....</h3>
+								<h3>You aren&apos;t in any servers that are Vaultonix Active....</h3>
 								{DISCORD_INVITE &&
 									<Link href={DISCORD_INVITE} style={{
 										"fontWeight": "800",
@@ -77,7 +77,7 @@ const DashboardClient = () => {
 							: <div className={guild_style.guilds}>
 								{active_guilds.map((active_guild: GuildDTO, index: number) => {
 									return (
-										<Link href={`/vaultonix/dashboard/${active_guild.id}`}>
+										<Link key={index} href={`/vaultonix/dashboard/${active_guild.id}`}>
 											<GuildPreview guild={active_guild} />
 										</Link>
 									);
