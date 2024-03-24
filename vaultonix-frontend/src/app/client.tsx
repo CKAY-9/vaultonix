@@ -72,7 +72,7 @@ const IndexClient = (props: {
 					</div>
 					{ball_positions.map((ball: BallPosition, index: number) => {
 						return (
-							<div className={style.ball} style={{ "left": `${ball.x}%`, "bottom": `${ball.y}%`, "borderRadius": `${50 - (ball.y - ball.x)}%` }}></div>
+							<div key={index} className={style.ball} style={{ "left": `${ball.x}%`, "bottom": `${ball.y}%`, "borderRadius": `${50 - (ball.y - ball.x)}%` }}></div>
 						)
 					})}
 				</div>
