@@ -3,7 +3,10 @@ import VaultonixClient from "./client";
 
 export const generateMetadata = (): Metadata => {
 	return {
-		"title": "App - Vaultonix"
+		"title": "App - Vaultonix",
+		"openGraph": {
+			"images": ["/Banner.png"]
+		  }
 	}
 }
 

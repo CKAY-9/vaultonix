@@ -6,7 +6,10 @@ import { Metadata } from "next";
 export const generateMetadata = (): Metadata => {
 	return {
 		title: "News - Vaultonix",
-		description: "Learn about the news surrounding Vaultonix and it's development."
+		description: "Learn about the news surrounding Vaultonix and it's development.",
+		"openGraph": {
+			"images": ["/Banner.png"]
+		}
 	}
 }
 

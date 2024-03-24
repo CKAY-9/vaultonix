@@ -5,7 +5,10 @@ import { getServerCookie } from "@/api/user/user.utils";
 
 export const generateMetadata = (): Metadata => {
 	return {
-		"title": "Home - Vaultonix"
+		"title": "Home - Vaultonix",
+    "openGraph": {
+      "images": ["/Banner.png"]
+    }
 	}
 }
 

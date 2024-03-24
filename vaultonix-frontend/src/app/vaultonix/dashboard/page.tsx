@@ -4,7 +4,10 @@ import DashboardClient from "./client";
 export const generateMetadata = (): Metadata => {
 	return {
 		"title": "Dashboard - Vaultonix",
-		"description": "Manage your servers that use Vaultonix."
+		"description": "Manage your servers that use Vaultonix.",
+		"openGraph": {
+			"images": ["/Banner.png"]
+		}
 	}
 }
 

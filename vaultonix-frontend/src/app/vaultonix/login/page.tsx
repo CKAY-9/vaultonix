@@ -4,7 +4,11 @@ import { Suspense } from "react";
 
 export const generateMetadata = (): Metadata => {
 	return {
-		"title": "Login - Vaultonix"
+		"title": "Login - Vaultonix",
+		"description": "Login to your Discord account to use Vaultonix",
+		"openGraph": {
+			"images": ["/Banner.png"]
+		}
 	}
 }
 
