@@ -6,6 +6,16 @@ export interface ServerDataReturn {
 
 export const initialServerData = async (guild_id: string): Promise<ServerDataReturn> => {
   try {
+    const check = await prisma.guildSettings.findFirst({
+      where: {
+        guild_id: guild_id
+      }
+    });
+    if (check !== null) {
+      return {
+        config: check
+      };
+    }
     const c = await prisma.guildSettings.create({
       data: {
         "global_stats": false,

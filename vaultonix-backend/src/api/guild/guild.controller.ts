@@ -1,7 +1,7 @@
-import { Controller, Get, HttpStatus, Query, Req, Res } from "@nestjs/common";
-import { Response, Request } from "express";
+import { Body, Controller, Get, HttpStatus, Put, Query, Req, Res } from "@nestjs/common";
+import { Response, Request, response } from "express";
 import { prisma } from "../prisma";
-import { GuildIDDTO } from "./guild.dto";
+import { GuildIDDTO, UpdateAutoRolesDTO } from "./guild.dto";
 import { initialServerData } from "../bot/bot.utils";
 
 @Controller("")
@@ -34,7 +34,7 @@ export class GuildController {
 
 	@Get("/config")
 	async getServerConfig(@Req() req: Request, @Query() query: GuildIDDTO, @Res() res: Response) {
-			let config = await prisma.guildSettings.findMany({
+			let config = await prisma.guildSettings.findFirst({
 					where: {
 							"guild_id": query.guild_id
 					}
@@ -62,5 +62,33 @@ export class GuildController {
 			console.log(ex);
 			return response.status(HttpStatus.BAD_REQUEST).json({"message": ex});
 		}
+	}
+
+	@Put("/auto_roles")
+	async updateAutoRoles(@Req() request: Request, @Body() body: UpdateAutoRolesDTO, @Res() response: Response) {
+		let guild = await prisma.guildSettings.findFirst({
+			where: {
+				"guild_id": body.guild_id
+			}
+		});
+		if (guild === null) {
+			await initialServerData(body.guild_id);
+			guild = await prisma.guildSettings.findFirst({
+				where: {
+					"guild_id": body.guild_id
+				}
+			});
+		}
+
+		const update = await prisma.guildSettings.update({
+			where: {
+				"guild_id": body.guild_id,
+				"id": guild.id
+			},
+			data: {
+				"join_roles": body.role_ids
+			}
+		});
+		return response.status(200).json({"message": "Updated roles."});
 	}
 }

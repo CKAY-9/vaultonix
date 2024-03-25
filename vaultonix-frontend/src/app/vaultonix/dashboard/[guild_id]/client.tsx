@@ -23,7 +23,7 @@ const GuildDashboardClient = (props: {
 
 	useEffect(() => {
 		(async () => {
-			if (typeof(window) === undefined) {
+			if (typeof(window) === undefined || typeof(document) === undefined) {
 				return;
 			}
 
@@ -35,7 +35,7 @@ const GuildDashboardClient = (props: {
 
 			const u = await getUserFromToken(user_token);
 			if (u === null) {
-				window.location.href = "/vaultonix/";
+				window.location.href = "/vaultonix";
 			}
 			const guilds = await getMyGuilds();
 			for (let i = 0; i < guilds.length; i++) {
@@ -54,12 +54,8 @@ const GuildDashboardClient = (props: {
 		})();
 	}, [props.guild_id]);
 
-	if (loading || user === null) {
+	if (loading || user === null || config === null || guild === null) {
 		return (<Loading />);
-	}
-
-	if (guild === null || config === null) {
-		return window.location.href = "/vaultonix/dashboard";
 	}
 
 	return (
@@ -95,7 +91,7 @@ const GuildDashboardClient = (props: {
 				</div>
 				<div className="grid" style={{"gridTemplateColumns": "55% auto"}}>
 					<div className="item">
-						<AutoRolesModule guild_id={props.guild_id} />
+						<AutoRolesModule guild_config={config} guild_id={props.guild_id} />
 					</div>
 					<div className="item">
 						<WelcomeGoodbyeModule />
