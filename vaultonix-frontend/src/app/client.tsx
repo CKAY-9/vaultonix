@@ -79,7 +79,7 @@ const IndexClient = (props: {
 					})}
 				</div>
 			</div>
-			<main className="container" style={{ "display": loading ? "none" : "flex" }}>
+			<main className={style.container} style={{ "display": loading ? "none" : "flex" }}>
 				<section style={{ "width": "50%" }}>
 					<h1>What is Vaultonix?</h1>
 					<p>

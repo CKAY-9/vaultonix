@@ -12,3 +12,7 @@ export interface DiscordUserDTO {
     global_name: string,
     avatar: string
 }
+
+export interface GetUserDTO {
+    user_id: number
+}

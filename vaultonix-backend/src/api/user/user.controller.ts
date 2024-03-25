@@ -1,6 +1,6 @@
 import { Controller, Get, HttpStatus, Query, Req, Res } from "@nestjs/common";
 import { Response, Request } from "express";
-import { DiscordCodeDTO, DiscordInitialDTO, DiscordUserDTO } from "./user.dto";
+import { DiscordCodeDTO, DiscordInitialDTO, DiscordUserDTO, GetUserDTO } from "./user.dto";
 import axios, { AxiosResponse } from "axios";
 import { DISCORD_API, DISCORD_CDN, FRONTEND_HOST, LOCAL_HOST } from "src/resources";
 import { prisma } from "../prisma";
@@ -17,6 +17,29 @@ export class UserController {
 					"token": user_token || ""
 				}
 			});
+			return response.status(200).json(user);
+		} catch (ex) {
+			console.log(ex);
+			return response.status(HttpStatus.BAD_REQUEST).json({"message": ex});
+		}
+	}
+
+	@Get("/public")
+	async getPublicUser(@Req() request: Request, @Query() query: GetUserDTO, @Res() response: Response) {
+		try {
+			const user = await prisma.users.findUnique({
+				where: {
+					"id": Number.parseInt(query.user_id.toString())
+				},
+				select: {
+					"avatar_url": true,
+					"discord_id": true,
+					"id": true,
+					"joined": true,
+					"supporter": true,
+					"username": true
+				}
+			})
 			return response.status(200).json(user);
 		} catch (ex) {
 			console.log(ex);

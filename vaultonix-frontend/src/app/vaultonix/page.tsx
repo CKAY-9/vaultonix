@@ -6,7 +6,7 @@ export const generateMetadata = (): Metadata => {
 		"title": "App - Vaultonix",
 		"openGraph": {
 			"images": ["/Banner.png"]
-		  }
+		}
 	}
 }
 

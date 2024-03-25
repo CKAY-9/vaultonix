@@ -3,3 +3,7 @@ export interface NewServerDTO {
     guild_owner: string,
     guild_name: string
 }
+
+export interface GetGuildDTO {
+    guild_id: string
+}

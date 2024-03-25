@@ -1,0 +1,35 @@
+.roles {
+  padding: 1rem;
+  background-color: var(--primary-700);
+  border-radius: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+
+  .role {
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background-color: var(--primary-500);
+  }
+}
+
+.add_role {
+  .add_roles {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    background-color: var(--primary-500);
+
+    .role {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      .color {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+      }
+    }
+  }
+}

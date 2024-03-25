@@ -1,27 +1,35 @@
 @keyframes opacity {
-    0% {
-        opacity: 0;
-    }
-    50% {
-        opacity: 1;
-    }
-    100% {
-        opacity: 0;
-    }
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 .loading {
-    width: 100vw; 
-    height: 100vh; 
-    top: 0; 
-    left: 0; 
-    position: sticky; 
-    background: black;
-    display: grid;
-    place-content: center;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  position: sticky;
+  background: black;
+  display: grid;
+  place-content: center;
 
+  h1 {
+    font-size: 10rem;
+    animation: opacity 2.5s cubic-bezier(0.19, 1, 0.22, 1) infinite;
+  }
+}
+
+@media only screen and (max-width: 800px) {
+  .loading {
     h1 {
-        font-size: 10rem;
-        animation: opacity 2.5s cubic-bezier(0.19, 1, 0.22, 1) infinite;
+      font-size: 3rem;
     }
+  }
 }

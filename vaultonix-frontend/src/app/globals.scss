@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap");
 
 :root {
-  --text-50: #edebf9;
+  --text-50: #ffffff;
   --text-100: #dad8f3;
   --text-200: #b6b0e8;
   --text-300: #9189dc;
@@ -67,6 +67,11 @@
   --radialPrimarySecondary: radial-gradient(#9b94df, #7d2631);
   --radialPrimaryAccent: radial-gradient(#9b94df, #cc8d56);
   --radialSecondaryAccent: radial-gradient(#7d2631, #cc8d56);
+
+  --shdw1: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  --shdw2: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+  --shdw3: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+  --shdw4: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
 }
 
 * {
@@ -74,13 +79,13 @@
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
+  font-size: 18px;
 }
 
 body, html {
   margin: 0; padding: 0;
   background-color: var(--background-950);
   color: var(--text-50);
-  font-size: 18px;
 }
 
 h1, h2, h3, h4 {
@@ -117,15 +122,20 @@ a {
   }
 }
 
-button {
+button, input, textarea {
   background-color: var(--primary-500);
   border: none;
   color: var(--text-50);
-  padding: 1rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
 
   &:focus {
     outline: none;
   }
+}
+
+button:hover {
+  cursor: pointer;
 }
 
 .container {
@@ -147,5 +157,45 @@ button {
       display: flex;
       flex-direction: column;
       gap: 1rem;
+  }
+}
+
+@keyframes rainbow_animation {
+  0%,100% {
+      background-position: 0 0;
+  }
+
+  50% {
+      background-position: 100% 0;
+  }
+}
+.rainbow {
+  background: linear-gradient(to right, #6666ff, #0099ff , #00ff00, #ff3399, #6666ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: rainbow_animation 6s ease-in-out infinite;
+  background-size: 400% 100%;
+}
+
+@media only screen and (max-width: 800px) {
+  .container {
+    margin: 10rem 1rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1.75rem;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+  }
+
+  h4 {
+    font-size: 1.25rem;
   }
 }
