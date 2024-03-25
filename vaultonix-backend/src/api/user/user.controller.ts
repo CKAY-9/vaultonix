@@ -101,4 +101,17 @@ export class UserController {
 			return response.redirect(FRONTEND_HOST + "/vaultonix/login");
 		}
 	}
+
+	@Get("/staff")
+	async getUserStaff(@Req() request: Request, @Query() query: GetUserDTO, @Res() response: Response) {
+		const staff = await prisma.staff.findFirst({
+			where: {
+				"user_id": Number.parseInt(query.user_id.toString() || "0")
+			}
+		});
+		if (staff === null) {
+			return response.status(HttpStatus.NOT_FOUND).json({"message": "Couldn't find staff priveledges."});
+		}
+		return response.status(200).json(staff);
+	}
 }

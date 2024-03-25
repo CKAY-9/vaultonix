@@ -122,8 +122,8 @@ a {
   }
 }
 
-button, input, textarea {
-  background-color: var(--primary-500);
+button, input, textarea, select, option {
+  background-color: var(--primary-700);
   border: none;
   color: var(--text-50);
   padding: 0.5rem;

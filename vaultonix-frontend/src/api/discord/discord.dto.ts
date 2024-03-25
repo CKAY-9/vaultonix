@@ -22,3 +22,10 @@ export interface GuildRoleDTO {
   icon?: string;
   permissions: string;
 }
+
+export interface GuildChannelDTO {
+  id: string;
+  type: number;
+  guild_id?: string;
+  name?: string;
+}

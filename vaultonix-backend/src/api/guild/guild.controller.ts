@@ -1,8 +1,9 @@
 import { Body, Controller, Get, HttpStatus, Put, Query, Req, Res } from "@nestjs/common";
-import { Response, Request, response } from "express";
+import { Response, Request, response, query } from "express";
 import { prisma } from "../prisma";
-import { GuildIDDTO, UpdateAutoRolesDTO } from "./guild.dto";
-import { initialServerData } from "../bot/bot.utils";
+import { GuildIDDTO, UpdateAutoRolesDTO, UpdateWelcomeGoodbyeDTO } from "./guild.dto";
+import { initialServerData, initialWelcomeGoodbye } from "../bot/bot.utils";
+import { GetGuildDTO } from "../bot/bot.dto";
 
 @Controller("")
 export class GuildController {
@@ -90,5 +91,44 @@ export class GuildController {
 			}
 		});
 		return response.status(200).json({"message": "Updated roles."});
+	}
+
+	@Get("/welcome_goodbye")
+	async getWelcomeGoodbyeMessage(@Req() request: Request, @Query() query: GetGuildDTO, @Res() response: Response) {
+		let guild_welcome_goodbye = await prisma.guildWelcomeGoodbye.findFirst({
+			where: {
+				"guild_id": query.guild_id
+			}
+		});
+		if (guild_welcome_goodbye === null) {
+			guild_welcome_goodbye = await initialWelcomeGoodbye(query.guild_id);
+		}
+
+		return response.status(200).json(guild_welcome_goodbye);
+	}
+
+	@Put("/welcome_goodbye")
+	async updateWelcomeGoodbyeMessage(@Req() request: Request, @Body() body: UpdateWelcomeGoodbyeDTO, @Res() response: Response) {
+		let guild_welcome_goodbye = await prisma.guildWelcomeGoodbye.findFirst({
+			where: {
+				"guild_id": body.guild_id
+			}
+		});
+		if (guild_welcome_goodbye === null) {
+			guild_welcome_goodbye = await initialWelcomeGoodbye(body.guild_id);
+		}
+
+		const update = await prisma.guildWelcomeGoodbye.update({
+			where: {
+				"id": guild_welcome_goodbye.id
+			},
+			data: {
+				"welcome": body.welcome,
+				"goodbye": body.goodbye,
+				"channel_id": body.channel_id,
+				"enabled": body.enabled
+			}
+		});
+		return response.status(200).json({"message": "Updated Welcome Goodbye."});
 	}
 }

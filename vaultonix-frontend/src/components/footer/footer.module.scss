@@ -1,0 +1,25 @@
+.footer {
+  display: flex;
+  flex-direction: row;
+  gap: 3rem;
+  padding: 5rem 10rem;
+  background-color: var(--primary-600);
+  position: relative;
+  z-index: 999;
+
+  nav {
+    display: flex;
+    gap: 1rem;
+
+    section {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      strong {
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+    }
+  }
+}

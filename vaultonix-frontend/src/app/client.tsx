@@ -8,6 +8,7 @@ import Image from "next/image";
 import { DISCORD_INVITE } from "@/api/resources";
 import Header from "@/components/header/header";
 import { UserDTO } from "@/api/user/user.dto";
+import Footer from "@/components/footer/footer";
 
 interface BallPosition {
 	x: number,
@@ -108,6 +109,9 @@ const IndexClient = (props: {
 					<Link href="/vaultonix"><h1>ENTER VAULTONIX</h1></Link>
 				</section>
 			</main>
+			<div style={{ "display": loading ? "none" : "grid" }}>
+				<Footer />
+			</div>
 		</>
 	);
 }

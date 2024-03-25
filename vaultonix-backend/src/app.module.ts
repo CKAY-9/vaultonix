@@ -7,6 +7,7 @@ import { BotModule } from './api/bot/bot.module';
 import { ConfigModule } from '@nestjs/config';
 import { GuildModule } from './api/guild/guild.module';
 import { DiscordModule } from './api/discord/discord.module';
+import { NewsModule } from './api/news/news.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { DiscordModule } from './api/discord/discord.module';
     BotModule,
     GuildModule,
     DiscordModule,
+    NewsModule,
     RouterModule.register([
       {
         // /api/v1
@@ -49,6 +51,11 @@ import { DiscordModule } from './api/discord/discord.module';
             // /api/v1/discord
             path: "discord",
             module: DiscordModule
+          },
+          {
+            // /api/v1/news
+            path: "news",
+            module: NewsModule
           }
         ]
       }

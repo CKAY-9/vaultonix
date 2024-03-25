@@ -22,4 +22,21 @@ export class DiscordController {
 			return response.status(HttpStatus.BAD_REQUEST).json({"message": "Failed to get roles."});
 		}
 	}
+
+	@Get("/guild_channels")
+	async getGuildChannels(@Req() request: Request, @Query() query: GetGuildDTO, @Res() response: Response) {
+		try {
+			const guilds = await axios({
+				"url": DISCORD_API + `/guilds/${query.guild_id}/channels`,
+				"method": "GET",
+				"headers": {
+					"Authorization": `Bot ${process.env.DISCORD_BOT_TOKEN}`
+				}
+			});
+			return response.status(200).json(guilds.data);
+		} catch (ex) {
+			console.log(ex);
+			return response.status(HttpStatus.BAD_REQUEST).json({"message": "Failed to get channels."});
+		}
+	}
 }

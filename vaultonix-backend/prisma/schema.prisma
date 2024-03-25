@@ -28,6 +28,22 @@ model GuildSettings {
   join_roles String[] @default([])
 }
 
+model GuildWelcomeGoodbye {
+  id Int @id @default(autoincrement())
+  guild_id String
+  channel_id String
+  welcome String
+  goodbye String
+  enabled Boolean
+}
+
+model GuildLevelRewards {
+  id Int @id @default(autoincrement())
+  guild_id String
+  level_json String
+  enabled Boolean
+}
+
 model GuildUsers {
   id Int @id @default(autoincrement())
   guild_id String 
@@ -45,4 +61,11 @@ model Users {
   avatar_url String
   joined DateTime @default(now())
   supporter Boolean @default(false)
+}
+
+model Staff {
+  id Int @id @default(autoincrement())
+  user_id Int
+  tag String
+  permissions Int
 }

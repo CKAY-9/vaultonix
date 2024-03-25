@@ -1,9 +1,10 @@
 "use client"
 
-import { getGuildConfig, getMyGuilds, getVaultonixActiveGuilds } from "@/api/discord/discord.api";
-import { GuildDTO, GuildSettingsDTO } from "@/api/discord/discord.dto";
+import { getGuildChannelsFromVaultonix, getGuildConfig, getMyGuilds, getVaultonixActiveGuilds } from "@/api/discord/discord.api";
+import { GuildChannelDTO, GuildDTO, GuildSettingsDTO } from "@/api/discord/discord.dto";
 import { getUserFromToken } from "@/api/user/user.api";
 import { UserDTO } from "@/api/user/user.dto";
+import Footer from "@/components/footer/footer";
 import Header from "@/components/header/header";
 import Loading from "@/components/loading/loading";
 import AutoRolesModule from "@/components/modules/auto-roles/auto-roles";
@@ -20,6 +21,7 @@ const GuildDashboardClient = (props: {
 	const [guild, setGuild] = useState<GuildDTO | null>(null);
 	const [is_active, setIsActive] = useState<boolean>(false);
 	const [config, setConfig] = useState<GuildSettingsDTO | null>(null);
+	const [channels, setChannels] = useState<GuildChannelDTO[]>([]);
 
 	useEffect(() => {
 		(async () => {
@@ -47,9 +49,11 @@ const GuildDashboardClient = (props: {
 			}
 
 			const conf = await getGuildConfig(props.guild_id);
+			const chnls = await getGuildChannelsFromVaultonix(props.guild_id);
 
 			setUser(u);
 			setConfig(conf);
+			setChannels(chnls);
 			setLoading(false);
 		})();
 	}, [props.guild_id]);
@@ -94,7 +98,7 @@ const GuildDashboardClient = (props: {
 						<AutoRolesModule guild_config={config} guild_id={props.guild_id} />
 					</div>
 					<div className="item">
-						<WelcomeGoodbyeModule />
+						<WelcomeGoodbyeModule guild_id={props.guild_id} guild_channels={channels} />
 					</div>
 				</div>
 				<div className="grid" style={{"gridTemplateColumns": "auto 55%"}}>
@@ -131,6 +135,7 @@ const GuildDashboardClient = (props: {
 					</div>
 				</div>
 			</main>
+			<Footer />
 		</>
 	);
 }

@@ -11,6 +11,7 @@ import Link from "next/link";
 import Header from "@/components/header/header";
 import { GuildDTO } from "@/api/discord/discord.dto";
 import { getMyGuilds, getVaultonixActiveGuilds } from "@/api/discord/discord.api";
+import Footer from "@/components/footer/footer";
 
 const VaultonixClient = () => {
 	const [user, setUser] = useState<UserDTO | null>(null);
@@ -160,6 +161,7 @@ const VaultonixClient = () => {
 					</div>
 				</div>
 			</main>
+			<Footer />
 		</>
 	);
 }

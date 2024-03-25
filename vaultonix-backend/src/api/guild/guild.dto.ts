@@ -1,8 +1,16 @@
 export interface GuildIDDTO {
-    guild_id: string
+  guild_id: string;
 }
 
 export interface UpdateAutoRolesDTO {
-    guild_id: string,
-    role_ids: string[]
+  guild_id: string;
+  role_ids: string[];
+}
+
+export interface UpdateWelcomeGoodbyeDTO {
+  guild_id: string;
+  channel_id: string;
+  welcome: string;
+  goodbye: string;
+  enabled: boolean;
 }

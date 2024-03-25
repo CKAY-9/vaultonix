@@ -5,6 +5,7 @@ import { GuildDTO } from "@/api/discord/discord.dto";
 import { DISCORD_INVITE } from "@/api/resources";
 import { getUserFromToken } from "@/api/user/user.api";
 import { UserDTO } from "@/api/user/user.dto";
+import Footer from "@/components/footer/footer";
 import GuildPreview from "@/components/guild-preview/guild-preview";
 import guild_style from "@/components/guild-preview/guild-preview.module.scss";
 import Header from "@/components/header/header";
@@ -59,6 +60,7 @@ const DashboardClient = () => {
 						</div>
 					</div>
 				</main>
+				<Footer />
 			</>
 		)
 	}
@@ -104,6 +106,7 @@ const DashboardClient = () => {
 					</div>
 				</div>
 			</main>
+			<Footer />
 		</>
 	);
 }

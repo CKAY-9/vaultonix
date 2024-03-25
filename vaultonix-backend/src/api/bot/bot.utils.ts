@@ -1,3 +1,4 @@
+import { GuildWelcomeGoodbye } from "@prisma/client";
 import { prisma } from "../prisma"
 
 export interface ServerDataReturn {
@@ -33,4 +34,25 @@ export const initialServerData = async (guild_id: string): Promise<ServerDataRet
       config: null
     }
   }
+}
+
+export const initialWelcomeGoodbye = async (guild_id: string): Promise<GuildWelcomeGoodbye> => {
+  const check = await prisma.guildWelcomeGoodbye.findFirst({
+    where: {
+      "guild_id": guild_id
+    }
+  });
+  if (check !== null) {
+    return check;
+  }
+  const create = await prisma.guildWelcomeGoodbye.create({
+    data: {
+      "channel_id": "",
+      "enabled": true,
+      "goodbye": "",
+      "welcome": "",
+      "guild_id": guild_id,
+    }
+  });
+  return create;
 }
