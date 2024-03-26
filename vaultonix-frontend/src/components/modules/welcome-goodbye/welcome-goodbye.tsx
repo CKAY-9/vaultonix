@@ -68,7 +68,7 @@ const WelcomeGoodbyeModule = (props: {
         cols={30}
         rows={2}
       ></textarea>
-      <select>
+      <select onChange={(e: BaseSyntheticEvent) => setChannel(e.target.value)}>
         {channel !== "" ? (
           <>
             {props.guild_channels
