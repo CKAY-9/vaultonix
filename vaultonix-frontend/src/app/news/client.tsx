@@ -35,7 +35,7 @@ const NewsClient = () => {
     <>
       {articles.map((article: NewsArticleDTO, index: number) => {
         return (
-          <Link href={`/news/${article.id}`}>
+          <Link key={index} href={`/news/${article.id}`}>
             <ArticlePreview article={article} />
           </Link>
         );

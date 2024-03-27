@@ -175,7 +175,7 @@ const ItemStoreAdminClient = (props: { user: UserDTO }) => {
           <div className="item">
             <h1>Item Store Admin</h1>
             <span>
-              Manage the official Vaultonix Item Store's items, prices, etc.
+              Manage the official Vaultonix Item Store&apos;s items, prices, etc.
             </span>
           </div>
           <div className="item">

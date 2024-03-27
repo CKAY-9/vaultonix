@@ -35,7 +35,7 @@ const StoreItemClient = (props: { item_id: string }) => {
       setItem(i);
       setLoading(false);
     })();
-  }, []);
+  }, [props.item_id]);
 
   if (loading || user === null || item === null) {
     return <Loading />;

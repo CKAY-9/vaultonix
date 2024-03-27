@@ -62,9 +62,9 @@ const ItemStoreClient = () => {
         )}
         <div className="grid" style={{ gridTemplateColumns: "70% auto" }}>
           <div className="item">
-            <h1>Vaultonix's Item Store</h1>
+            <h1>Vaultonix&apos;s Item Store</h1>
             <span>
-              This is Vaultonix's Official Item Store. You can buy items from
+              This is Vaultonix&apos;s Official Item Store. You can buy items from
               Vaultonix that might not be available elsewhere.
             </span>
           </div>

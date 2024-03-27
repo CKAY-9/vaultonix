@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
@@ -25,6 +26,19 @@ public class HTTP {
             post.setEntity(entity);
             post.setHeaders(headers);
             CloseableHttpResponse response = client.execute(post);
+            return response;
+        } catch (IOException ex) {
+            System.out.println(ex.toString());
+            return null;
+        }
+    }
+
+    public static CloseableHttpResponse deleteRequest(String url, Header[] headers) {
+        try {
+            CloseableHttpClient client = HttpClients.createDefault();
+            HttpDelete delete = new HttpDelete(url);
+            delete.setHeaders(headers);
+            CloseableHttpResponse response = client.execute(delete);
             return response;
         } catch (IOException ex) {
             System.out.println(ex.toString());

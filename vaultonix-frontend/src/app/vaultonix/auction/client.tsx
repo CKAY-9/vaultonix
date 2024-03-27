@@ -41,7 +41,7 @@ const AuctionClient = () => {
           <div className="item">
             <h1>Auction House</h1>
             <span>
-              Vaultonix's Official Auction House. Buy/Sell items and out-bid
+              Vaultonix&apos;s Official Auction House. Buy/Sell items and out-bid
               them broke boys.
             </span>
           </div>

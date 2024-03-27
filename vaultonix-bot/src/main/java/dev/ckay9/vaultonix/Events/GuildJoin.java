@@ -25,7 +25,7 @@ public class GuildJoin extends ListenerAdapter {
         req_data.guild_name = guild.getName();
         req_data.guild_owner = guild.getOwnerId();
 
-        CloseableHttpResponse response = HTTP.postRequest((Object)req_data, Vaultonix.API_HOST + "/bot/new_server", new Header[]{
+        CloseableHttpResponse response = HTTP.postRequest((Object)req_data, Vaultonix.API_HOST + "/bot/guild", new Header[]{
             new BasicHeader(HttpHeaders.AUTHORIZATION, Vaultonix.BOT_AUTH_KEY)
         });
         System.out.println(response.toString());

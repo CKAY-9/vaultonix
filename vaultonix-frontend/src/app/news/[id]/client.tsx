@@ -43,7 +43,7 @@ const NewsArticleClient = (props: {
       const u = await getUserFromToken(user_token);
       setUser(u);
     })();
-  }, []);
+  }, [props.article_id]);
 
   if (loading || article === null || author === null) {
     return (<Loading />);

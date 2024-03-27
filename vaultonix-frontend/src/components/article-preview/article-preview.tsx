@@ -19,7 +19,7 @@ const ArticlePreview = (props: {
       setAuthor(a);
       setLoading(false);
     })();
-  }, []);
+  }, [props.article.author_id]);
 
   if (loading || author === null) {
     return (

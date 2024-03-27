@@ -37,7 +37,7 @@ const WelcomeGoodbyeModule = (props: {
         enabled
       );
     })();
-  }, [props.guild_id, channel, welcome, goodbye]);
+  }, [props.guild_id, channel, welcome, goodbye, enabled]);
 
   const update = async (e: BaseSyntheticEvent) => {
     e.preventDefault();
