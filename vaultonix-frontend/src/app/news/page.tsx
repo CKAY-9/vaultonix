@@ -19,7 +19,7 @@ export const generateMetadata = (): Metadata => {
 
 const NewsPage = async () => {
   const user = await getUserFromToken(getServerCookie("user_token"));
-  const staff = await getUserStaff(user.id || 0);
+  const staff = await getUserStaff(user?.id || 0);
 
   return (
     <>
