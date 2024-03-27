@@ -77,7 +77,7 @@ export class UserController {
         data: {
           grant_type: 'authorization_code',
           code: query.code,
-          redirect_uri: LOCAL_HOST + '/api/v1/user/login',
+          redirect_uri: process.env.LOCAL_HOST + '/api/v1/user/login',
           client_id: process.env.DISCORD_CLIENT_ID,
           client_secret: process.env.DISCORD_CLIENT_SECRET,
         },
@@ -91,7 +91,7 @@ export class UserController {
         },
       });
       if (user_request.status !== 200) {
-        return response.redirect(FRONTEND_HOST + '/vaultonix/login');
+        return response.redirect(process.env.FRONTEND_HOST + '/vaultonix/login');
       }
 
       const user_check = await prisma.users.findMany({
@@ -101,7 +101,7 @@ export class UserController {
       });
       if (user_check.length >= 1) {
         return response.redirect(
-          FRONTEND_HOST +
+          process.env.FRONTEND_HOST +
             `/vaultonix/login?token=${user_check[0].token}&discord=${initial_request.data.access_token}`,
         );
       }
@@ -128,7 +128,7 @@ export class UserController {
       );
     } catch (ex: any) {
       console.log(ex);
-      return response.redirect(FRONTEND_HOST + '/vaultonix/login');
+      return response.redirect(process.env.FRONTEND_HOST + '/vaultonix/login');
     }
   }
 
