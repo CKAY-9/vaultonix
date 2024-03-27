@@ -15,7 +15,7 @@ interface BallPosition {
   y: number;
 }
 
-const IndexClient = (props: { user: UserDTO }) => {
+const IndexClient = (props: { user: UserDTO | null }) => {
   const [ball_positions, setBallPositions] = useState<BallPosition[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
