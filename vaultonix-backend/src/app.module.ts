@@ -8,17 +8,20 @@ import { ConfigModule } from '@nestjs/config';
 import { GuildModule } from './api/guild/guild.module';
 import { DiscordModule } from './api/discord/discord.module';
 import { NewsModule } from './api/news/news.module';
+import { StoreModule } from './api/store/store.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: ".env",
-      isGlobal: true
+      envFilePath: '.env',
+      isGlobal: true,
     }),
-    ThrottlerModule.forRoot([{
-      ttl: 60000,
-      limit: 15
-    }]),
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000,
+        limit: 15,
+      },
+    ]),
     // Modules
     APIModule,
     UserModule,
@@ -26,40 +29,46 @@ import { NewsModule } from './api/news/news.module';
     GuildModule,
     DiscordModule,
     NewsModule,
+    StoreModule,
     RouterModule.register([
       {
         // /api/v1
-        path: "api/v1",
+        path: 'api/v1',
         module: APIModule,
         children: [
           {
             // /api/v1/user
-            path: "user",
-            module: UserModule
+            path: 'user',
+            module: UserModule,
           },
           {
             // /api/v1/bot
-            path: "bot",
-            module: BotModule
+            path: 'bot',
+            module: BotModule,
           },
           {
             // /api/v1/guild
-            path: "guild",
-            module: GuildModule
+            path: 'guild',
+            module: GuildModule,
           },
           {
             // /api/v1/discord
-            path: "discord",
-            module: DiscordModule
+            path: 'discord',
+            module: DiscordModule,
           },
           {
             // /api/v1/news
-            path: "news",
-            module: NewsModule
-          }
-        ]
-      }
-    ])
+            path: 'news',
+            module: NewsModule,
+          },
+          {
+            // /api/v1/store
+            path: 'store',
+            module: StoreModule,
+          },
+        ],
+      },
+    ]),
   ],
 })
 export class AppModule {}

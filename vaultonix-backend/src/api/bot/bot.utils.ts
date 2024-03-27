@@ -1,4 +1,4 @@
-import { GuildWelcomeGoodbye } from "@prisma/client";
+import { GuildLevelRewards, GuildWelcomeGoodbye } from "@prisma/client";
 import { prisma } from "../prisma"
 
 export interface ServerDataReturn {
@@ -55,4 +55,24 @@ export const initialWelcomeGoodbye = async (guild_id: string): Promise<GuildWelc
     }
   });
   return create;
+}
+
+export const initializeLevelRewards = async (guild_id: string): Promise<GuildLevelRewards> => {
+  const check = await prisma.guildLevelRewards.findFirst({
+    where: {
+      "guild_id": guild_id
+    }
+  });
+  if (check !== null) {
+    return null;
+  }
+
+  const insert = await prisma.guildLevelRewards.create({
+      data: {
+        "enabled": true,
+        "guild_id": guild_id,
+        "level_json": "[]",
+      }
+  });
+  return insert;
 }

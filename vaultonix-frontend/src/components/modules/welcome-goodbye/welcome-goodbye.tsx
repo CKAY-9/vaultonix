@@ -28,8 +28,16 @@ const WelcomeGoodbyeModule = (props: {
       setEnabled(get_welcome.enabled);
       setChannel(get_welcome.channel_id);
       setLoading(false);
+
+      const update = await updateWelcomeGoodbyeForGuild(
+        props.guild_id,
+        channel,
+        welcome,
+        goodbye,
+        enabled
+      );
     })();
-  }, [props.guild_id]);
+  }, [props.guild_id, channel, welcome, goodbye]);
 
   const update = async (e: BaseSyntheticEvent) => {
     e.preventDefault();
@@ -68,13 +76,20 @@ const WelcomeGoodbyeModule = (props: {
         cols={30}
         rows={2}
       ></textarea>
-      <select onChange={(e: BaseSyntheticEvent) => setChannel(e.target.value)}>
+      <select
+        defaultValue={channel}
+        onChange={(e: BaseSyntheticEvent) => setChannel(e.target.value)}
+      >
         {channel !== "" ? (
           <>
             {props.guild_channels
-              .filter((channel) => channel.type === 0)
-              .map((channel, index) => {
-                return <option key={index} value={channel.id}>#{channel.name}</option>;
+              .filter((c) => c.type === 0)
+              .map((c, index) => {
+                return (
+                  <option key={index} value={c.id}>
+                    #{c.name}
+                  </option>
+                );
               })}
             <option value="">SELECT CHANNEL</option>
           </>
@@ -84,14 +99,15 @@ const WelcomeGoodbyeModule = (props: {
             {props.guild_channels
               .filter((channel) => channel.type === 0)
               .map((channel, index) => {
-                return <option key={index} value={channel.id}>#{channel.name}</option>;
+                return (
+                  <option key={index} value={channel.id}>
+                    #{channel.name}
+                  </option>
+                );
               })}
           </>
         )}
       </select>
-      <button onClick={update} style={{ width: "fit-content" }}>
-        Update
-      </button>
     </>
   );
 };

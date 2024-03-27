@@ -48,6 +48,7 @@ model GuildUsers {
   id Int @id @default(autoincrement())
   guild_id String 
   inventory String @default("{}")
+  xp Int @default(0)
   level Int @default(1)
   user_id String
   credits Int @default(0)
@@ -68,4 +69,35 @@ model Staff {
   user_id Int
   tag String
   permissions Int
+}
+
+model ItemStore {
+  id Int @id @default(autoincrement())
+  global_sale Decimal @default(0)
+  total_credits_spent Int @default(0)
+  total_money_spent Int @default(0)
+  total_transactions Int @default(0)
+}
+
+model ItemStoreEntry {
+  id Int @id @default(autoincrement())
+  credit_price Int
+  money_price Int
+  name String
+  item_id String
+  thumbnail String
+  description String
+  stock Int @default(10000)
+  sold Int @default(0)
+  sale Decimal @default(0)
+  premium Boolean @default(false)
+}
+
+model NewsArticle {
+  id Int @id @default(autoincrement())
+  title String
+  body String
+  author_id Int
+  posted DateTime @default(now())
+  updated DateTime @default(now())
 }

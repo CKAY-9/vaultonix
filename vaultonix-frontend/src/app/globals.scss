@@ -12,7 +12,7 @@
   --text-800: #1d174f;
   --text-900: #0e0c27;
   --text-950: #070614;
-  
+
   --background-50: #ececf9;
   --background-100: #d8d8f3;
   --background-200: #b1b1e7;
@@ -24,7 +24,7 @@
   --background-800: #18184e;
   --background-900: #0c0c27;
   --background-950: #060613;
-  
+
   --primary-50: #edebf9;
   --primary-100: #dad8f3;
   --primary-200: #b6b0e8;
@@ -36,7 +36,7 @@
   --primary-800: #1d174f;
   --primary-900: #0e0c27;
   --primary-950: #070614;
-  
+
   --secondary-50: #f9ebed;
   --secondary-100: #f3d8dc;
   --secondary-200: #e7b1b8;
@@ -48,7 +48,7 @@
   --secondary-800: #4e181f;
   --secondary-900: #270c10;
   --secondary-950: #140608;
-  
+
   --accent-50: #f9f2eb;
   --accent-100: #f3e5d8;
   --accent-200: #e8cab0;
@@ -59,7 +59,7 @@
   --accent-700: #764a23;
   --accent-800: #4f3117;
   --accent-900: #27190c;
-  --accent-950: #140c06;  
+  --accent-950: #140c06;
 
   --linearPrimarySecondary: linear-gradient(#9b94df, #7d2631);
   --linearPrimaryAccent: linear-gradient(#9b94df, #cc8d56);
@@ -82,13 +82,18 @@
   font-size: 18px;
 }
 
-body, html {
-  margin: 0; padding: 0;
+body,
+html {
+  margin: 0;
+  padding: 0;
   background-color: var(--background-950);
   color: var(--text-50);
 }
 
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
   margin: 0;
 }
 
@@ -122,7 +127,11 @@ a {
   }
 }
 
-button, input, textarea, select, option {
+button,
+input,
+textarea,
+select,
+option {
   background-color: var(--primary-700);
   border: none;
   color: var(--text-50);
@@ -151,26 +160,35 @@ button:hover {
   gap: 1rem;
 
   .item {
-      padding: 1rem;
-      background-color: var(--primary-800);
-      border-radius: 0.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
+    padding: 1rem;
+    background-color: var(--primary-800);
+    border-radius: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    box-shadow: var(--shdw2);
   }
 }
 
 @keyframes rainbow_animation {
-  0%,100% {
-      background-position: 0 0;
+  0%,
+  100% {
+    background-position: 0 0;
   }
 
   50% {
-      background-position: 100% 0;
+    background-position: 100% 0;
   }
 }
 .rainbow {
-  background: linear-gradient(to right, #6666ff, #0099ff , #00ff00, #ff3399, #6666ff);
+  background: linear-gradient(
+    to right,
+    #6666ff,
+    #0099ff,
+    #00ff00,
+    #ff3399,
+    #6666ff
+  );
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -197,5 +215,9 @@ button:hover {
 
   h4 {
     font-size: 1.25rem;
+  }
+
+  .grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 100%)) !important;
   }
 }

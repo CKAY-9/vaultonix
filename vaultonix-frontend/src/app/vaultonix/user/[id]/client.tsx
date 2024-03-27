@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { getUserFromID, getUserFromToken } from "@/api/user/user.api";
 import { UserDTO } from "@/api/user/user.dto";
@@ -9,16 +9,14 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import style from "./user.module.scss";
 
-const UserClient = (props: {
-  user_id: number
-}) => {
+const UserClient = (props: { user_id: number }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [profile, setProfile] = useState<UserDTO | null>(null);
   const [user, setUser] = useState<UserDTO | null>(null);
 
   useEffect(() => {
     (async () => {
-      if (typeof(window) === undefined || typeof(document) === undefined) {
+      if (typeof window === undefined || typeof document === undefined) {
         return;
       }
 
@@ -39,9 +37,8 @@ const UserClient = (props: {
     })();
   }, [props.user_id]);
 
-
   if (loading || profile === null) {
-    return (<Loading />);
+    return <Loading />;
   }
 
   return (
@@ -50,7 +47,7 @@ const UserClient = (props: {
       <main className="container">
         <div className="grid">
           <div className="item">
-            <Image 
+            <Image
               src={profile.avatar_url}
               alt="PFP"
               sizes="100%"
@@ -65,6 +62,6 @@ const UserClient = (props: {
       </main>
     </>
   );
-}
+};
 
 export default UserClient;

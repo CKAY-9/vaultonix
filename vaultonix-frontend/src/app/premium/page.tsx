@@ -3,10 +3,10 @@ import PremiumClient from "./client";
 
 export const generateMetadata = (): Metadata => {
   return {
-    "title": "Premium - Vaultonix",
-    "description": "Learn about Vaultonix Premium and it's benefits."
-  }
-}
+    title: "Premium - Vaultonix",
+    description: "Learn about Vaultonix Premium and it's benefits.",
+  };
+};
 
 const PremiumPage = () => {
   return (
@@ -14,6 +14,6 @@ const PremiumPage = () => {
       <PremiumClient />
     </>
   );
-}
+};
 
 export default PremiumPage;

@@ -2,21 +2,21 @@ import { Metadata } from "next";
 import DashboardClient from "./client";
 
 export const generateMetadata = (): Metadata => {
-	return {
-		"title": "Dashboard - Vaultonix",
-		"description": "Manage your servers that use Vaultonix.",
-		"openGraph": {
-			"images": ["/Banner.png"]
-		}
-	}
-}
+  return {
+    title: "Dashboard - Vaultonix",
+    description: "Manage your servers that use Vaultonix.",
+    openGraph: {
+      images: ["/Banner.png"],
+    },
+  };
+};
 
-const DashboardPage = () => {	
-	return (
-		<>
-			<DashboardClient />
-		</>
-	);
-}
+const DashboardPage = () => {
+  return (
+    <>
+      <DashboardClient />
+    </>
+  );
+};
 
 export default DashboardPage;

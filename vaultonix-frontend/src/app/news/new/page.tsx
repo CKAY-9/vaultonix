@@ -6,10 +6,10 @@ import { Metadata } from "next";
 
 export const generateMetadata = (): Metadata => {
   return {
-    "title": "New Article - Vaultonix",
-    "description": "Create a new news article on Vaultonix News."
-  }
-}
+    title: "New Article - Vaultonix",
+    description: "Create a new news article on Vaultonix News.",
+  };
+};
 
 const NewArticlePage = async () => {
   const user = await getUserFromToken(getServerCookie("user_token"));
@@ -23,6 +23,6 @@ const NewArticlePage = async () => {
       <NewArticleClient staff={staff} user={user} />
     </>
   );
-}
+};
 
 export default NewArticlePage;

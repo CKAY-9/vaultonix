@@ -65,7 +65,13 @@ const Header = (props: { user: UserDTO | null }) => {
             <Link href="/">Home</Link>
             <Link href="/news">News</Link>
             <Link href="/vaultonix">Vaultonix</Link>
-            <Link href="/premium" className="rainbow" style={{"fontWeight": "700"}}>PREMIUM</Link>
+            <Link
+              href="/premium"
+              className="rainbow"
+              style={{ fontWeight: "700" }}
+            >
+              PREMIUM
+            </Link>
             <Link href="/vaultonix/dashboard">Dashboard</Link>
             <section>Vaultonix, made by CKAY9</section>
           </div>
@@ -80,7 +86,9 @@ const Header = (props: { user: UserDTO | null }) => {
         <Link href="/">Home</Link>
         <Link href="/news">News</Link>
         <Link href="/vaultonix">Vaultonix</Link>
-        <Link href="/premium" className="rainbow" style={{"fontWeight": "700"}}>PREMIUM</Link>
+        <Link href="/premium" className="rainbow" style={{ fontWeight: "700" }}>
+          PREMIUM
+        </Link>
         <div
           style={{ width: "2px", height: "auto", background: "white" }}
         ></div>

@@ -1,18 +1,18 @@
 export interface DiscordCodeDTO {
-    code: string
+  code: string;
 }
 
 export interface DiscordInitialDTO {
-    access_token: string,
-    token_type: string
+  access_token: string;
+  token_type: string;
 }
 
 export interface DiscordUserDTO {
-    id: string,
-    global_name: string,
-    avatar: string
+  id: string;
+  global_name: string;
+  avatar: string;
 }
 
 export interface GetUserDTO {
-    user_id: number
+  user_id: number;
 }

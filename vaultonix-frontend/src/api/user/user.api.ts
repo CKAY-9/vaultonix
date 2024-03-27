@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import { API_URL } from "../resources";
 import { UserDTO } from "./user.dto";
 
-export const getUserFromToken = async (token: string | null | undefined) => {
+export const getUserFromToken = async (token: string | null | undefined): Promise<UserDTO | null> => {
   if (token === null || token === undefined) {
     return null;
   }
@@ -20,7 +20,7 @@ export const getUserFromToken = async (token: string | null | undefined) => {
   }
 };
 
-export const getUserFromID = async (user_id: number) => {
+export const getUserFromID = async (user_id: number): Promise<UserDTO | null> => {
   try {
     const request: AxiosResponse<UserDTO> = await axios({
       url: API_URL + "/user/public",

@@ -1,14 +1,21 @@
 @keyframes wiggle {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.25); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .container {
   display: grid;
-  width: 100vw;
   height: 100vh;
   place-content: center;
+  position: relative;
+  z-index: 1;
 }
 
 .premium {
@@ -22,6 +29,7 @@
   align-items: center;
   justify-content: center;
   box-shadow: var(--shdw2);
+  text-align: center;
 
   .image {
     width: 5rem;
@@ -45,5 +53,23 @@
     box-shadow: var(--shdw1);
     align-items: center;
     justify-content: center;
+  }
+}
+
+@media only screen and (max-width: 800px) {
+  .container {
+    display: flex;
+    height: 100vh;
+    place-content: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .premium {
+    border-radius: 0;
+  }
+
+  .home {
+    display: none;
   }
 }

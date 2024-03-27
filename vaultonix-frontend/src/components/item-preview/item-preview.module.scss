@@ -1,0 +1,30 @@
+.item {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: var(--primary-700);
+  box-shadow: var(--shdw1);
+  transition: 0.35s ease all;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: flex-start;
+  color: white !important;
+  text-align: center;
+
+  &:hover {
+    box-shadow: var(--shdw2);
+  }
+
+  .thumbnail {
+    width: auto;
+    height: 5rem;
+    object-fit: cover;
+  }
+
+  .name {
+    font-weight: 700;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+  }
+}

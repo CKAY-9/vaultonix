@@ -2,7 +2,7 @@ import { Body, Controller, Get, HttpStatus, Put, Query, Req, Res } from "@nestjs
 import { Response, Request, response, query } from "express";
 import { prisma } from "../prisma";
 import { GuildIDDTO, UpdateAutoRolesDTO, UpdateWelcomeGoodbyeDTO } from "./guild.dto";
-import { initialServerData, initialWelcomeGoodbye } from "../bot/bot.utils";
+import { initialServerData, initialWelcomeGoodbye, initializeLevelRewards } from "../bot/bot.utils";
 import { GetGuildDTO } from "../bot/bot.dto";
 
 @Controller("")
@@ -130,5 +130,19 @@ export class GuildController {
 			}
 		});
 		return response.status(200).json({"message": "Updated Welcome Goodbye."});
+	}
+
+	@Get("/levels")
+	async getRewardLevels(@Req() request: Request, @Query() query: GetGuildDTO, @Res() response: Response) {
+		let levels = await prisma.guildLevelRewards.findFirst({
+			where: {
+				"guild_id": query.guild_id
+			}
+		});
+		if (levels === null) {
+			levels = await initializeLevelRewards(query.guild_id);
+		}
+		
+		return response.status(200).json(levels);
 	}
 }
