@@ -13,8 +13,11 @@ export const generateMetadata = (): Metadata => {
 
 const NewArticlePage = async () => {
   const user = await getUserFromToken(getServerCookie("user_token"));
+  if (user === null) {
+    redirect("/news");
+  }
   const staff = await getUserStaff(user.id || 0);
-  if (user === null || staff === null) {
+  if (staff === null) {
     redirect("/news");
   }
 
