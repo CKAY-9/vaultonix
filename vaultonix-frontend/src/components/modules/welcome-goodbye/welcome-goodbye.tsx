@@ -28,16 +28,8 @@ const WelcomeGoodbyeModule = (props: {
       setEnabled(get_welcome.enabled);
       setChannel(get_welcome.channel_id);
       setLoading(false);
-
-      const update = await updateWelcomeGoodbyeForGuild(
-        props.guild_id,
-        channel,
-        welcome,
-        goodbye,
-        enabled
-      );
     })();
-  }, [props.guild_id, channel, welcome, goodbye, enabled]);
+  }, [props.guild_id]);
 
   const update = async (e: BaseSyntheticEvent) => {
     e.preventDefault();
@@ -108,6 +100,7 @@ const WelcomeGoodbyeModule = (props: {
           </>
         )}
       </select>
+      <button onClick={update}>Update</button>
     </>
   );
 };

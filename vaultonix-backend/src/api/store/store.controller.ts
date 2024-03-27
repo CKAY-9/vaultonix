@@ -74,21 +74,38 @@ export class StoreController {
     try {
       const item = await prisma.itemStoreEntry.findFirst({
         where: {
-          id: Number.parseInt(query.item_id.toString())
-        }
+          id: Number.parseInt(query.item_id.toString()),
+        },
       });
       if (item === null) {
         return response
           .status(HttpStatus.NOT_FOUND)
           .json({ message: 'Failed to get item.' });
       }
-      return response
-        .status(200)
-        .json(item);
+      return response.status(200).json(item);
     } catch (ex) {
       return response
         .status(HttpStatus.NOT_FOUND)
         .json({ message: 'Failed to get item.' });
     }
+  }
+
+  @Post('/webhook')
+  async stripeWebhook(
+    @Req() request: Request,
+    @Body() body: any,
+    @Res() response: Response,
+  ) {
+    const event = body;
+
+    switch (event.type) {
+      case 'payment_intent.succeeded':
+        const payment_intent = event.data.object;
+        break;
+      default:
+        console.log(`Unhandled Stripe event: ${event.type}`);
+    }
+
+    return response.status(200).json({ received: true });
   }
 }

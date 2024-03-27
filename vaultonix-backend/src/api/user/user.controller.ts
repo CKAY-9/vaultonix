@@ -123,7 +123,7 @@ export class UserController {
       });
 
       return response.redirect(
-        FRONTEND_HOST +
+        process.env.FRONTEND_HOST +
           `/vaultonix/login?token=${token}&discord=${initial_request.data.access_token}`,
       );
     } catch (ex: any) {
