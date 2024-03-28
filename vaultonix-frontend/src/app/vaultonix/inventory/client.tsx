@@ -58,19 +58,25 @@ const InventoryClient = () => {
             ) : (
               <>
                 <h3>Guilds</h3>
-                <div className={style.inventories}>  
+                <div className={style.inventories}>
                   {guilds.map((guild, index) => {
-                    return <Link href={`/vaultonix/inventory/${guild.id}`} className={style.inventory}>
-                      <Image 
-                        src={`${DISCORD_CDN}/icons/${guild.id}/${guild.icon}`}
-                        alt="Icon"
-                        sizes="100%"
-                        width={0}
-                        height={0}
-                        className={style.icon}
-                      />
-                      <h4>{guild.name}</h4>
-                    </Link>;
+                    return (
+                      <Link
+                        key={index}
+                        href={`/vaultonix/inventory/${guild.id}`}
+                        className={style.inventory}
+                      >
+                        <Image
+                          src={`${DISCORD_CDN}/icons/${guild.id}/${guild.icon}`}
+                          alt="Icon"
+                          sizes="100%"
+                          width={0}
+                          height={0}
+                          className={style.icon}
+                        />
+                        <h4>{guild.name}</h4>
+                      </Link>
+                    );
                   })}
                 </div>
               </>

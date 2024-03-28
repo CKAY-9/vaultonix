@@ -53,7 +53,7 @@ const StoreItemClient = (props: { item_id: string }) => {
       setGuildUser(gu);
       setCurrentGuildData(g);
     })();
-  }, [current_guild]);
+  }, [current_guild, user?.discord_id]);
 
   if (loading || user === null || item === null) {
     return <Loading />;
