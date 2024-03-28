@@ -23,9 +23,9 @@ const Reward = (props: {
   const [credits, setCredits] = useState<number>(props.level.credits);
 
   useEffect(() => {
-    if (props.roles !== undefined && props.level.roles !== undefined) {
+    if (props.roles !== undefined && props.level.selected_roles !== undefined) {
       for (let i = 0; i < props.roles.length; i++) {
-        if (props.level.roles.includes(props.roles[i].id)) {
+        if (props.level.selected_roles.includes(props.roles[i].id)) {
           setSelectedRoles((old) => [...old, i]);
         }
       }
@@ -149,7 +149,7 @@ const LevelRewardsModule = (props: { guild_id: string }) => {
       {
         level: 0,
         credits: 0,
-        roles: [],
+        selected_roles: [],
       },
     ]);
   };
