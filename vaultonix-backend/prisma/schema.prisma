@@ -15,9 +15,9 @@ datasource db {
 
 model Guilds {
   id Int @id @default(autoincrement())
-  guild_owner String
-  guid_name String
-  guild_id String
+  guild_owner String @default("")
+  guild_name String @default("")
+  guild_id String @default("")
 }
 
 model GuildSettings {
@@ -34,14 +34,21 @@ model GuildWelcomeGoodbye {
   channel_id String
   welcome String
   goodbye String
-  enabled Boolean
+  enabled Boolean @default(true)
 }
 
 model GuildLevelRewards {
   id Int @id @default(autoincrement())
   guild_id String
   level_json String
-  enabled Boolean
+  enabled Boolean @default(true)
+}
+
+model GuildTrivia {
+  id Int @id @default(autoincrement())
+  guild_id String
+  questions String @default("[]")
+  enabled Boolean @default(true)
 }
 
 model GuildUsers {
@@ -52,6 +59,19 @@ model GuildUsers {
   level Int @default(1)
   user_id String
   credits Int @default(0)
+}
+
+model GuildTrade {
+  id Int @id @default(autoincrement())
+  user_id String
+  partner_id String
+  user_items String[] @default([])
+  partner_items String[] @default([])
+  user_confirmed Boolean @default(false)
+  partner_confirmed Boolean @default(false)
+  trade_complete Boolean @default(false)
+  completed DateTime @default(now())
+  guild_id String
 }
 
 model Users {

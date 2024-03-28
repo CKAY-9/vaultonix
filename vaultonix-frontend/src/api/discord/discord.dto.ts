@@ -7,6 +7,13 @@ export interface GuildDTO {
   approximate_member_count: number;
 }
 
+export interface VaultonixGuildDTO {
+  id: number;
+  guild_name: string;
+  guild_owner: string;
+  guild_id: string;
+}
+
 export interface GuildSettingsDTO {
   id: number;
   guild_id: string;

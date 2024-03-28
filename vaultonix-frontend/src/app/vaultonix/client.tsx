@@ -9,18 +9,23 @@ import style from "./app.module.scss";
 import Image from "next/image";
 import Link from "next/link";
 import Header from "@/components/header/header";
-import { GuildDTO } from "@/api/discord/discord.dto";
+import { GuildDTO, VaultonixGuildDTO } from "@/api/discord/discord.dto";
 import {
+  getGuildFromVaultonix,
   getMyGuilds,
   getVaultonixActiveGuilds,
 } from "@/api/discord/discord.api";
 import Footer from "@/components/footer/footer";
+import GuildSelector from "@/components/guild-selector/guild-selector";
 
 const VaultonixClient = () => {
   const [user, setUser] = useState<UserDTO | null>(null);
   const [loadingUser, setLoadingUser] = useState<boolean>(true);
   const [guilds, setGuilds] = useState<GuildDTO[]>([]);
   const [active_guilds, setActiveGuilds] = useState<GuildDTO[]>([]);
+  const [selected_guild_id, setSelectedGuildID] = useState<string>("");
+  const [loading_guild, setLoadingGuild] = useState<boolean>(false);
+  const [current_guild, setCurrentGuild] = useState<VaultonixGuildDTO | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -51,6 +56,15 @@ const VaultonixClient = () => {
       setLoadingUser(false);
     })();
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      setLoadingGuild(true);
+      const g = await getGuildFromVaultonix(selected_guild_id);
+      setCurrentGuild(g);
+      setLoadingGuild(false);
+    })();
+  }, [selected_guild_id]);
 
   if (loadingUser || user === null) {
     return <Loading />;
@@ -120,6 +134,7 @@ const VaultonixClient = () => {
       />
       <Header user={user} />
       <main className="container">
+        <Link href="/">Home</Link>
         <div className={style.grid} style={{ gridTemplateColumns: "70% auto" }}>
           <div className={style.item}>
             <Image
@@ -193,7 +208,27 @@ const VaultonixClient = () => {
               <span>Vaultonix Economy: $0</span>
             </section>
           </div>
-          <div className={style.item} style={{ flexDirection: "row" }}></div>
+          <div className={style.item}>
+            <h3>Guild</h3>
+            <GuildSelector
+              on_guild_select={(guild_id: string) =>
+                setSelectedGuildID(guild_id)
+              }
+            />
+            {loading_guild ? (
+              <span>Loading...</span>
+            ) : (
+              <>
+                {current_guild !== null && (
+                  <>
+                    <section>
+                      <Link href={`/vaultonix/leaderboard/${current_guild.guild_id}`}>Leaderboard</Link>
+                    </section>
+                  </>
+                )}
+              </>
+            )}
+          </div>
         </div>
       </main>
       <Footer />

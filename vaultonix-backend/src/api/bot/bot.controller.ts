@@ -5,14 +5,15 @@ import {
   Get,
   HttpStatus,
   Post,
+  Put,
   Query,
   Req,
   Res,
 } from '@nestjs/common';
-import { Response, Request } from 'express';
+import { Response, Request, response } from 'express';
 import { prisma } from '../prisma';
-import { GetGuildDTO, NewServerDTO } from './bot.dto';
-import { initialServerData } from './bot.utils';
+import { GetGuildDTO, NewServerDTO, UpdateXPDTO } from './bot.dto';
+import { addXPToUser, initializeGuildUser } from '../user/user.utils';
 
 @Controller('')
 export class BotController {
@@ -22,12 +23,23 @@ export class BotController {
     @Body() body: NewServerDTO,
     @Res() res: Response,
   ) {
-    const check_previous = await prisma.guilds.findMany({
+    const check_previous = await prisma.guilds.findFirst({
       where: {
         guild_id: body.guild_id,
       },
     });
-    if (check_previous.length >= 1) {
+    if (check_previous !== null) {
+      const update = await prisma.guilds.update({
+        where: {
+          id: check_previous.id,
+        },
+        data: {
+          guild_id: body.guild_id,
+          guild_owner: body.guild_owner,
+          guild_name: body.guild_name
+        }
+      })
+
       return res
         .status(HttpStatus.FOUND)
         .json({ message: 'Guild already registered!' });
@@ -35,7 +47,7 @@ export class BotController {
 
     const insert = await prisma.guilds.create({
       data: {
-        guid_name: body.guild_name,
+        guild_name: body.guild_name,
         guild_id: body.guild_id,
         guild_owner: body.guild_owner,
       },
@@ -67,5 +79,25 @@ export class BotController {
       },
     });
     return response.status(200).json({ message: 'Deleted guild.' });
+  }
+
+  @Put('/xp')
+  async updateUserXP(
+    @Req() request: Request,
+    @Body() body: UpdateXPDTO,
+    @Res() response: Response,
+  ) {
+    let user = await prisma.guildUsers.findFirst({
+      where: {
+        user_id: body.user_id,
+        guild_id: body.guild_id,
+      },
+    });
+    if (user == null) {
+      user = await initializeGuildUser(body.guild_id, body.user_id);
+    }
+
+    const update = await addXPToUser(user, body.xp_change);
+    return response.status(200).json(update);
   }
 }

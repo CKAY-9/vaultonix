@@ -1,0 +1,22 @@
+.inventories {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 300px));
+  gap: 1rem;
+
+  .inventory {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    background-color: var(--primary-600);
+    box-shadow: var(--shdw1);
+    align-items: center;
+
+    .icon {
+      width: 5rem;
+      height: 5rem;
+      border-radius: 50%;
+    }
+  }
+}

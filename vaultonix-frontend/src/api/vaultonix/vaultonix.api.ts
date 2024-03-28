@@ -1,6 +1,7 @@
 import axios from "axios";
 import { API_URL } from "../resources";
-import { WelcomeGoodbyeDTO } from "./vaultonix.dto";
+import { LevelRewardsDTO, TriviaDTO, WelcomeGoodbyeDTO } from "./vaultonix.dto";
+import { GuildUserDTO } from "../user/user.dto";
 
 export const updateAutoRolesForGuild = async (
   guild_id: string,
@@ -20,6 +21,23 @@ export const updateAutoRolesForGuild = async (
     return false;
   }
 };
+
+export const getGuildUsers = async (
+  guild_id: string
+): Promise<GuildUserDTO[]> => {
+  try {
+    const response = await axios({
+      url: API_URL + "/guild/users",
+      method: "GET",
+      params: {
+        guild_id
+      }
+    });
+    return response.data
+  } catch (ex) {
+    return [];
+  }
+}
 
 export const getWelcomeGoodbyeForGuild = async (
   guild_id: string
@@ -47,18 +65,71 @@ export const updateWelcomeGoodbyeForGuild = async (
 ): Promise<boolean> => {
   try {
     const request = await axios({
-      "url": API_URL + "/guild/welcome_goodbye",
-      "method": "PUT",
-      "data": {
+      url: API_URL + "/guild/welcome_goodbye",
+      method: "PUT",
+      data: {
         guild_id,
         channel_id,
         welcome,
         goodbye,
-        enabled
-      }
+        enabled,
+      },
     });
     return true;
   } catch (ex) {
     return false;
   }
 };
+
+export const getLevelRewards = async (
+  guild_id: string
+): Promise<LevelRewardsDTO | null> => {
+  try {
+    const request = await axios({
+      url: API_URL + "/guild/levels",
+      method: "GET",
+      params: {
+        guild_id,
+      },
+    });
+    return request.data;
+  } catch (ex) {
+    return null;
+  }
+};
+
+export const updateLevelRewards = async (
+  guild_id: string,
+  level_rewards: LevelRewardsDTO
+): Promise<LevelRewardsDTO | null> => {
+  try {
+    const request = await axios({
+      url: API_URL + "/guild/levels",
+      method: "PUT",
+      data: {
+        level_rewards,
+        guild_id,
+      },
+    });
+    return request.data;
+  } catch (ex) {
+    return null;
+  }
+};
+
+export const getTrivia = async (
+  guild_id: string
+): Promise<TriviaDTO | null> => {
+  try {
+    const request = await axios({
+      url: API_URL + "/guild/trivia",
+      method: "GET",
+      params: {
+        guild_id
+      }
+    });
+    return request.data;
+  } catch (ex) {
+    return null;
+  }
+}

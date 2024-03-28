@@ -1,8 +1,8 @@
 import { getUserFromToken, getUserStaff } from "@/api/user/user.api";
-import { getServerCookie } from "@/api/user/user.utils";
 import { redirect } from "next/navigation";
 import ItemStoreAdminClient from "./client";
 import { Metadata } from "next";
+import { getServerCookie } from "@/api/server-cookies";
 
 export const generateMetadata = (): Metadata => {
   return {

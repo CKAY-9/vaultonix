@@ -5,6 +5,7 @@ import style from "./auto-roles.module.scss";
 import { GuildRoleDTO, GuildSettingsDTO } from "@/api/discord/discord.dto";
 import { getGuildRolesFromVaultonix } from "@/api/discord/discord.api";
 import { updateAutoRolesForGuild } from "@/api/vaultonix/vaultonix.api";
+import RolePreview from "@/components/role-preview/role-preview";
 
 const AutoRolesModule = (props: {
   guild_id: string;
@@ -67,20 +68,12 @@ const AutoRolesModule = (props: {
           return (
             <button
               key={index}
-              className={style.role}
               onClick={() => {
                 setRoles((old) => [...old, role]);
                 setAutoRoles((roles) => roles.filter((r) => r.id !== role.id));
               }}
             >
-              <div
-                className={style.color}
-                style={{
-                  backgroundColor: `#${role.color || "ffffff"}`,
-                  boxShadow: "var(--shdw1)",
-                }}
-              ></div>
-              <span>{role.name}</span>
+              <RolePreview role={role} />
             </button>
           );
         })}
@@ -102,17 +95,9 @@ const AutoRolesModule = (props: {
                     setAutoRoles((old) => [...old, role]);
                     setRoles((roles) => roles.filter((r) => r.id !== role.id));
                   }}
-                  className={style.role}
                   key={index}
                 >
-                  <div
-                    className={style.color}
-                    style={{
-                      backgroundColor: `#${role.color || "ffffff"}`,
-                      boxShadow: "var(--shdw1)",
-                    }}
-                  ></div>
-                  <span>{role.name}</span>
+                  <RolePreview role={role} />
                 </button>
               );
             })}

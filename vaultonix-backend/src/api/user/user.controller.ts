@@ -4,6 +4,7 @@ import {
   DiscordCodeDTO,
   DiscordInitialDTO,
   DiscordUserDTO,
+  GetGuildUserDTO,
   GetUserDTO,
 } from './user.dto';
 import axios, { AxiosResponse } from 'axios';
@@ -15,6 +16,7 @@ import {
 } from 'src/resources';
 import { prisma } from '../prisma';
 import { SHA256 } from 'crypto-js';
+import { initializeGuildUser } from './user.utils';
 
 @Controller('')
 export class UserController {
@@ -149,5 +151,40 @@ export class UserController {
         .json({ message: "Couldn't find staff priveledges." });
     }
     return response.status(200).json(staff);
+  }
+
+  @Get('/guild')
+  async getGuildUser(
+    @Req() request: Request,
+    @Query() query: GetGuildUserDTO,
+    @Res() response: Response
+  ) {
+    let guild_user = await prisma.guildUsers.findFirst({
+      where: {
+        guild_id: query.guild_id,
+        user_id: query.user_id
+      }
+    });
+    if (guild_user === null) {
+      guild_user = await initializeGuildUser(query.guild_id, query.user_id);
+    }
+
+    return response.status(200).json(guild_user);
+  }
+
+  @Get('/discord')
+  async convertDiscordIDToVaultonix(@Req() request: Request, @Query() query: GetGuildUserDTO, @Res() response: Response) {
+    try {
+      const request = await axios({
+        url: DISCORD_API + `/guilds/${query.guild_id}/members/${query.user_id}`,
+        method: "GET",
+        headers: {
+          "Authorization": `Bot ${process.env.DISCORD_BOT_TOKEN}`
+        }
+      });
+      return response.status(200).json(request.data);
+    } catch (ex) {
+      return response.status(HttpStatus.BAD_REQUEST).json({"message": "Failed to get Discord user."});
+    }
   }
 }

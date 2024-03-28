@@ -55,6 +55,7 @@ const DashboardClient = () => {
       <>
         <Header user={user} />
         <main className="container">
+          <Link href="/vaultonix">Vaultonix</Link>
           <div className="grid">
             <div className="item">
               <span style={{ fontWeight: "100" }}>
@@ -74,6 +75,7 @@ const DashboardClient = () => {
     <>
       <Header user={user} />
       <main className="container">
+        <Link href="/vaultonix">Vaultonix</Link>
         <div className="grid">
           <div className="item">
             <span style={{ fontWeight: "100" }}>

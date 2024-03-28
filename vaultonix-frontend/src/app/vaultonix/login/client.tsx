@@ -6,16 +6,19 @@ import Link from "next/link";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { setCookie } from "@/utils/cookie";
+import { useEffect } from "react";
 
 const LoginClient = () => {
   const search_params = useSearchParams();
   const token = search_params.get("token");
   const discord = search_params.get("discord");
-  if (token !== null && discord !== null) {
-    setCookie("user_token", token, 999);
-    window.sessionStorage.setItem("discord_token", discord);
-    window.location.href = "/vaultonix";
-  }
+  useEffect(() => {
+    if (token !== null && discord !== null && typeof(window) !== undefined && typeof(document) !== undefined) {
+      setCookie("user_token", token, 999);
+      window.sessionStorage.setItem("discord_token", discord);
+      window.location.href = "/vaultonix";
+    }
+  }, [discord, token]);
 
   return (
     <>

@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from "axios";
-import { GuildChannelDTO, GuildDTO, GuildRoleDTO, GuildSettingsDTO } from "./discord.dto";
+import { GuildChannelDTO, GuildDTO, GuildRoleDTO, GuildSettingsDTO, VaultonixGuildDTO } from "./discord.dto";
 import { API_URL, DISCORD_API } from "../resources";
+import { DiscordUserDTO } from "../user/user.dto";
 
 // Vaultonix API
 export const getGuildConfig = async (
@@ -22,8 +23,7 @@ export const getGuildConfig = async (
 
 export const getVaultonixActiveGuilds = async (guilds: GuildDTO[]) => {
   const guildsWithVaultonix = [];
-  for (let i = 0; i < guilds.length; i++) {
-    const g = guilds[i];
+  for await (const g of guilds) {
     try {
       const request = await axios({
         url: API_URL + "/guild/registered",
@@ -35,7 +35,9 @@ export const getVaultonixActiveGuilds = async (guilds: GuildDTO[]) => {
       if (request.status === 200) {
         guildsWithVaultonix.push(g);
       }
-    } catch (ex) {}
+    } catch (ex) {
+      console.log(ex);
+    }
   }
   return guildsWithVaultonix;
 };
@@ -76,6 +78,40 @@ export const getGuildChannelsFromVaultonix = async (
   }
 };
 
+export const getGuildFromDiscord = async (
+  guild_id: string
+): Promise<GuildDTO | null> => {
+  try {
+    const request = await axios({
+      url: API_URL + "/guild/discord",
+      method: "GET",
+      params: {
+        guild_id
+      }
+    });
+    return request.data;
+  } catch (ex) {
+    return null;
+  }
+}
+
+export const getGuildFromVaultonix = async (
+  guild_id: string
+): Promise<VaultonixGuildDTO | null> => {
+  try {
+    const request = await axios({
+      url: API_URL + "/guild",
+      method: "GET",
+      params: {
+        guild_id
+      }
+    });
+    return request.data;
+  } catch (ex) {
+    return null;
+  }
+}
+
 // Discord API
 export const getMyGuilds = async (): Promise<GuildDTO[]> => {
   if (typeof window === undefined || typeof document === undefined) {
@@ -96,6 +132,22 @@ export const getMyGuilds = async (): Promise<GuildDTO[]> => {
     return [];
   }
 };
+
+export const getUserFromDiscord = async (
+  user_id: string,
+  guild_id: string
+): Promise<DiscordUserDTO | null> => {
+  if (typeof(window) === undefined) return null;
+
+  const request: AxiosResponse<DiscordUserDTO> = await axios({
+    url: DISCORD_API + `/guilds/${guild_id}/members/${user_id}`,
+    method: "GET",
+    headers: {
+      "Authorization": `Bearer ${window.sessionStorage.getItem("discord_token") || ""}`
+    }
+  });
+  return request.data;
+}
 
 export const getGuildRolesFromDiscord = async (
   guild_id: string

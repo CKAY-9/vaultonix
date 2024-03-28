@@ -1,0 +1,16 @@
+.role {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  background-color: var(--primary-500);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: var(--shdw1);
+
+  .color {
+    border: 1px solid white;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+  }
+}

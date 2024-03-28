@@ -14,3 +14,10 @@ export interface NewStoreItemDTO {
 export interface GetStoreItemDTO {
   item_id: number
 }
+
+export interface BuyItemDTO {
+  item_id: number;
+  user_id: string;
+  guild_id: string;
+  credits: boolean;
+}

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { ItemStoreDTO, StoreEntryDTO } from "./store.dto";
 import { API_URL } from "../resources";
+import { getCookie } from "@/utils/cookie";
 
 export const getStoreData = async (): Promise<ItemStoreDTO> => {
   const request = await axios({
@@ -34,6 +35,28 @@ export const getStoreItem = async (item_id: number): Promise<StoreEntryDTO | nul
     return request.data;
   } catch (ex) {
     return null;
+  }
+}
+
+export const purchaseItemWithCredits = async (item_id: number, guild_id: string, user_id: string) => {
+  try {
+    if (typeof(document) === undefined) return;
+    const request = await axios({
+      url: API_URL + "/store/purchase",
+      method: "POST",
+      data: {
+        item_id,
+        guild_id,
+        user_id,
+        credits: true
+      },
+      headers: {
+        Authorization: getCookie("user_token") || ""
+      }
+    });
+    return true;
+  } catch (ex) {
+    return false;
   }
 }
 

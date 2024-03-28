@@ -1,8 +1,9 @@
 .guild_selector {
   background-color: var(--primary-700);
-  padding: 1rem;
+  padding: 0.5rem 1rem !important;
   border-radius: 0.5rem;
   width: fit-content;
+  position: relative;
 
   #current_guild {
     display: flex;
@@ -17,4 +18,52 @@
   height: 2rem;
   border-radius: 50%;
   background-color: var(--primary-400);
+}
+
+.all_guilds {
+  z-index: 1000;
+  border-radius: 0.5rem;
+  position: absolute;
+  overflow: auto;
+  max-width: 250px;
+  min-width: 250px;
+  max-height: 300px;
+  transform: translateY(100%);
+  bottom: 0;
+  left: 0;
+  padding: 1rem;
+  background-color: var(--primary-700);
+  display: grid;
+
+  .guild {
+    display: flex;
+    align-items: center;
+    text-align: left;
+    gap: 0.5rem;
+    border-radius: 0;
+    transition: 0.35s ease all;
+
+    &:hover {
+      background-color: var(--primary-600);
+    }
+
+    .icon {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+    }
+  }
+}
+
+.current_guild {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  .icon {
+    width: 2rem;
+    height: 2rem;
+    object-fit: cover;
+    border-radius: 50%;
+  }
 }

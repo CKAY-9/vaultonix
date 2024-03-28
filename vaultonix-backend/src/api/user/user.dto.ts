@@ -16,3 +16,8 @@ export interface DiscordUserDTO {
 export interface GetUserDTO {
   user_id: number;
 }
+
+export interface GetGuildUserDTO {
+  user_id: string;
+  guild_id: string;
+}

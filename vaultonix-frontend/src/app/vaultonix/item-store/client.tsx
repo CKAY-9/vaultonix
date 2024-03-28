@@ -60,6 +60,7 @@ const ItemStoreClient = () => {
         {admin && (
           <Link href="/vaultonix/item-store/admin">Item Store Admin</Link>
         )}
+        <Link href="/vaultonix">Vaultonix</Link>
         <div className="grid" style={{ gridTemplateColumns: "70% auto" }}>
           <div className="item">
             <h1>Vaultonix&apos;s Item Store</h1>
@@ -90,10 +91,10 @@ const ItemStoreClient = () => {
         </div>
         <div className="grid">
           <div className="item">
-            {store_items.length <= 0 && (
-              <h3>There are currently no items in the store.</h3>
-            )}
             <h3>Inventory</h3>
+            {store_items.length <= 0 && (
+              <h4>There are currently no items in the store.</h4>
+            )}
             <div className={style.items}>
               {store_items.map((item: StoreEntryDTO, index: number) => {
                 return (

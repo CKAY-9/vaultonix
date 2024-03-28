@@ -19,7 +19,7 @@ const ItemPreview = (props: {
       <span>{props.item.description.slice(0, 25)}...</span>
       <section style={{"display": "flex", "gap": "0.5rem"}}>
         {props.item.money_price >= 0 && <span>${props.item.money_price}</span>}
-        {props.item.credit_price >= 0 && <div style={{"width": "1px", "height": "100%", "backgroundColor": "white"}}></div>}
+        {props.item.credit_price >= 0 && <div style={{"width": "2px", "height": "1rem", "backgroundColor": "white"}}></div>}
         {props.item.credit_price >= 0 && <span>{props.item.credit_price} Credits</span>}
       </section>
       <section style={{"display": "flex", "gap": "0.5rem"}}>

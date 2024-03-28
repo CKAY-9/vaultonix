@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import IndexClient from "./client";
 import { getUserFromToken } from "@/api/user/user.api";
-import { getServerCookie } from "@/api/user/user.utils";
+import { getServerCookie } from "@/api/server-cookies";
 
 export const generateMetadata = (): Metadata => {
   return {

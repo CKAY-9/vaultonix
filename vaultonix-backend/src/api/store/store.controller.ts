@@ -11,8 +11,9 @@ import {
 } from '@nestjs/common';
 import { Response, Request, response } from 'express';
 import { prisma } from '../prisma';
-import { initializeStoreData } from './store.utils';
-import { GetStoreItemDTO, NewStoreItemDTO } from './store.dto';
+import { getStoreItemFromID, initializeStoreData } from './store.utils';
+import { BuyItemDTO, GetStoreItemDTO, NewStoreItemDTO } from './store.dto';
+import { addXPToUser } from '../user/user.utils';
 
 @Controller('')
 export class StoreController {
@@ -107,5 +108,70 @@ export class StoreController {
     }
 
     return response.status(200).json({ received: true });
+  }
+
+  @Post("/purchase")
+  async purchaseItem(@Req() request: Request, @Body() body: BuyItemDTO, @Res() response: Response) {
+    const token = request.headers.authorization;
+    if (token === null) {
+      return response.status(HttpStatus.BAD_REQUEST).json({message: "Failed to get token."});
+    }
+
+    const user = await prisma.users.findFirst({
+      where: {
+        token
+      }
+    });
+    if (user === null) {
+      return response.status(HttpStatus.UNAUTHORIZED).json({message: "Failed to get user."});
+    }
+
+    const guild_user = await prisma.guildUsers.findFirst({
+      where: {
+        guild_id: body.guild_id,
+        user_id: body.user_id,
+      }
+    });
+    if (guild_user === null) {
+      return response.status(HttpStatus.NOT_FOUND).json({message: "Failed to get guild user."});
+    }
+
+    if (guild_user.user_id !== user.discord_id) {
+      return response.status(HttpStatus.UNAUTHORIZED).json({message: "Guild and Vaultonix user data didn't match!"});
+    }
+
+    const item = await getStoreItemFromID(body.item_id); 
+    if (item === null) {
+      return response.status(HttpStatus.NOT_FOUND).json({message: "Failed to get item."});
+    }
+
+    if (item.premium && !user.supporter) {
+      return response.status(HttpStatus.UNAUTHORIZED).json({message: "Premium only item."});
+    }
+
+    if (body.credits) {
+      if (item.credit_price > guild_user.credits) {
+        return response.status(HttpStatus.BAD_REQUEST).json({message: "User doesn't have enough credits."});
+      }
+
+      const inv: string[] = JSON.parse(guild_user.inventory);
+      inv.push(item.id.toString());
+
+      const xp_add = await addXPToUser(guild_user, Math.floor(item.credit_price / 10));
+
+      const update = await prisma.guildUsers.update({
+        where: {
+          id: guild_user.id,
+          guild_id: guild_user.guild_id,
+          user_id: body.user_id
+        },
+        data: {
+          credits: guild_user.credits - item.credit_price,
+          inventory: JSON.stringify(inv)
+        }
+      });
+
+      return response.status(200).json({message: "Bought item with credits."});
+    }
   }
 }

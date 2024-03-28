@@ -1,3 +1,5 @@
+import { GuildLevelRewards } from "@prisma/client";
+
 export interface GuildIDDTO {
   guild_id: string;
 }
@@ -13,4 +15,9 @@ export interface UpdateWelcomeGoodbyeDTO {
   welcome: string;
   goodbye: string;
   enabled: boolean;
+}
+
+export interface UpdateLevelRewardsDTO {
+  guild_id: string;
+  level_rewards: GuildLevelRewards;
 }

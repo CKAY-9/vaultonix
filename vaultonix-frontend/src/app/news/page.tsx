@@ -1,10 +1,10 @@
 import { getUserFromToken, getUserStaff } from "@/api/user/user.api";
-import { getServerCookie } from "@/api/user/user.utils";
 import Footer from "@/components/footer/footer";
 import Header from "@/components/header/header";
 import { Metadata } from "next";
 import Link from "next/link";
 import NewsClient from "./client";
+import { getServerCookie } from "@/api/server-cookies";
 
 export const generateMetadata = (): Metadata => {
   return {

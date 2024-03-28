@@ -72,7 +72,7 @@ const Header = (props: { user: UserDTO | null }) => {
             >
               PREMIUM
             </Link>
-            <Link href="/vaultonix/dashboard">Dashboard</Link>
+            {props.user !== null && <Link href="/vaultonix/dashboard">Dashboard</Link>}
             <section>Vaultonix, made by CKAY9</section>
           </div>
         )}
@@ -89,15 +89,20 @@ const Header = (props: { user: UserDTO | null }) => {
         <Link href="/premium" className="rainbow" style={{ fontWeight: "700" }}>
           PREMIUM
         </Link>
-        <div
-          style={{ width: "2px", height: "auto", background: "white" }}
-        ></div>
-        <Link href="/vaultonix/item-store">Item Store</Link>
-        <Link href="/vaultonix/auction">Auction House</Link>
-        <div
-          style={{ width: "2px", height: "auto", background: "white" }}
-        ></div>
-        <Link href="/vaultonix/dashboard">Dashboard</Link>
+        {props.user !== null && (
+          <>
+            <div
+              style={{ width: "2px", height: "auto", background: "white" }}
+            ></div>
+            <Link href="/vaultonix/inventory">Inventory</Link>
+            <Link href="/vaultonix/item-store">Item Store</Link>
+            <Link href="/vaultonix/auction">Auction House</Link>
+            <div
+              style={{ width: "2px", height: "auto", background: "white" }}
+            ></div>
+            <Link href="/vaultonix/dashboard">Dashboard</Link>
+          </>
+        )}
       </section>
       <section>
         <UserChip user={props.user} personal={true} />
