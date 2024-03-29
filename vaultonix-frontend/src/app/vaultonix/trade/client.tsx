@@ -50,7 +50,7 @@ const Guild = (props: { guild: GuildDTO; user_id: string }) => {
         <div className={style.offers}>
           {trades.map((trade, index) => {
             return (
-              <Link href={`/vaultonix/trade/${trade.id}`}>
+              <Link key={index} href={`/vaultonix/trade/${trade.id}`}>
                 <TradeOffer
                   guild={props.guild}
                   trade_offer={trade}
