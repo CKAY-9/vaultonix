@@ -1,22 +1,28 @@
 package dev.ckay9.vaultonix.Commands;
 
 import java.awt.Color;
+import java.io.IOException;
 
 import org.apache.http.Header;
+import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.message.BasicHeader;
+import org.apache.http.util.EntityUtils;
+
+import com.google.gson.Gson;
 
 import dev.ckay9.vaultonix.Vaultonix;
 import dev.ckay9.vaultonix.Bot.HTTP;
 import dev.ckay9.vaultonix.Bot.NewTrade;
+import dev.ckay9.vaultonix.Bot.TradeOfferResponse;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.IMentionable;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.Channel;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
-import net.dv8tion.jda.api.interactions.commands.Command.Option;
 
 public class CommandHandler extends ListenerAdapter {
   private void handleAboutCommand(SlashCommandInteractionEvent event) {
@@ -43,19 +49,68 @@ public class CommandHandler extends ListenerAdapter {
   }
 
   private void handleTradeCommand(SlashCommandInteractionEvent event) {
-    OptionMapping option = event.getOption("trade_partner");
-    if (option == null) return;
+    try {
+      OptionMapping option = event.getOption("trade_partner");
+      if (option == null) {
+        event.reply("Failed to execute command.");
+        return;
+      }
 
-    IMentionable mentionable = option.getAsMentionable();
-    String partner_id = mentionable.getId();
-    String user_id = event.getUser().getId();
+      User user = event.getUser();
+      IMentionable mentionable = option.getAsMentionable();
+      String partner_id = mentionable.getId();
+      String user_id = user.getId();
 
-    CloseableHttpResponse response = HTTP.postRequest(
-      new NewTrade(user_id, partner_id, event.getGuild().getId()), 
-      Vaultonix.API_HOST + "/trade", 
-      new Header[]{
-        new BasicHeader("Authorization", Vaultonix.BOT_AUTH_KEY)
-      });
+      CloseableHttpResponse response = HTTP.postRequest(
+        new NewTrade(user_id, partner_id, event.getGuild().getId()), 
+        Vaultonix.API_HOST + "/trade", 
+        new Header[]{
+          new BasicHeader("Authorization", Vaultonix.BOT_AUTH_KEY)
+        });
+      
+      if (response.getStatusLine().getStatusCode() != 200) {
+        EmbedBuilder builder = new EmbedBuilder();
+        builder.setTitle("Vaultonix Error", Vaultonix.FRONTEND_HOST);
+        builder.setColor(Color.RED);
+        builder.setDescription("There was an error!");
+        builder.addField("Error", "Failed to create trade offer!", false);
+        builder.setFooter("Thanks for using Vaultonix", event.getJDA().getSelfUser().getAvatarUrl());
+        event.replyEmbeds(builder.build()).setEphemeral(true).queue();
+        return;
+      }
+
+      Gson gson = new Gson();
+      HttpEntity entity = response.getEntity();
+      TradeOfferResponse offer_response = gson.fromJson(EntityUtils.toString(entity, "UTF-8"), TradeOfferResponse.class);
+      if (offer_response == null) {
+        event.reply("Failed to get response");
+        return;
+      }
+
+      User partner_user = event.getGuild().getMemberById(partner_id).getUser();
+
+      EmbedBuilder builder = new EmbedBuilder();
+      builder.setTitle("Vaultonix Trades", Vaultonix.FRONTEND_HOST);
+      builder.setColor(Color.GREEN);
+      builder.setDescription("Successfully created trade offer.");
+      builder.addField("Message", "Created trade offer with " + partner_user.getName() + ". You can view it at " + Vaultonix.FRONTEND_HOST + "/vaultonix/trade/" + offer_response.id + ".", false);
+      builder.setFooter("Thanks for using Vaultonix", event.getJDA().getSelfUser().getAvatarUrl());
+      event.replyEmbeds(builder.build()).queue();
+
+      EmbedBuilder private_message_builder = new EmbedBuilder();
+      private_message_builder.setTitle("Vaultonix Trades", Vaultonix.FRONTEND_HOST);
+      private_message_builder.setColor(Color.GREEN);
+      private_message_builder.setDescription("Invited to trade.");
+      private_message_builder.addField("Message", user.getName() + " has created a trade offer for you. You can view it at " + Vaultonix.FRONTEND_HOST + "/vaultonix/trade/" + offer_response.id + ".", false);
+      private_message_builder.setFooter("Thanks for using Vaultonix", event.getJDA().getSelfUser().getAvatarUrl());
+      partner_user.openPrivateChannel()
+        .flatMap(channel -> channel.sendMessageEmbeds(private_message_builder.build()))
+        .queue();
+    } catch (IOException ex) {
+      System.out.println(ex);
+      event.reply("Failed to execute command.");
+      return;
+    }
   }
 
   private void handleInventoryCommand(SlashCommandInteractionEvent event) {

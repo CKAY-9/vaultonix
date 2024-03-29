@@ -93,18 +93,32 @@ export class UserController {
         },
       });
       if (user_request.status !== 200) {
-        return response.redirect(process.env.FRONTEND_HOST + '/vaultonix/login');
+        return response.redirect(
+          process.env.FRONTEND_HOST + '/vaultonix/login',
+        );
       }
 
-      const user_check = await prisma.users.findMany({
+      const user_check = await prisma.users.findFirst({
         where: {
           discord_id: user_request.data.id,
         },
       });
-      if (user_check.length >= 1) {
+      if (user_check !== null) {
+        await prisma.users.update({
+          where: {
+            id: user_check.id,
+          },
+          data: {
+            avatar_url:
+              DISCORD_CDN +
+              `/avatars/${user_request.data.id}/${user_request.data.avatar}`,
+            username: user_request.data.global_name,
+          },
+        });
+
         return response.redirect(
           process.env.FRONTEND_HOST +
-            `/vaultonix/login?token=${user_check[0].token}&discord=${initial_request.data.access_token}`,
+            `/vaultonix/login?token=${user_check.token}&discord=${initial_request.data.access_token}`,
         );
       }
 
@@ -157,13 +171,13 @@ export class UserController {
   async getGuildUser(
     @Req() request: Request,
     @Query() query: GetGuildUserDTO,
-    @Res() response: Response
+    @Res() response: Response,
   ) {
     let guild_user = await prisma.guildUsers.findFirst({
       where: {
         guild_id: query.guild_id,
-        user_id: query.user_id
-      }
+        user_id: query.user_id,
+      },
     });
     if (guild_user === null) {
       guild_user = await initializeGuildUser(query.guild_id, query.user_id);
@@ -173,18 +187,46 @@ export class UserController {
   }
 
   @Get('/discord')
-  async convertDiscordIDToVaultonix(@Req() request: Request, @Query() query: GetGuildUserDTO, @Res() response: Response) {
+  async convertDiscordIDToVaultonix(
+    @Req() request: Request,
+    @Query() query: GetGuildUserDTO,
+    @Res() response: Response,
+  ) {
     try {
       const request = await axios({
         url: DISCORD_API + `/guilds/${query.guild_id}/members/${query.user_id}`,
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Authorization": `Bot ${process.env.DISCORD_BOT_TOKEN}`
-        }
+          Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}`,
+        },
       });
       return response.status(200).json(request.data);
     } catch (ex) {
-      return response.status(HttpStatus.BAD_REQUEST).json({"message": "Failed to get Discord user."});
+      return response
+        .status(HttpStatus.BAD_REQUEST)
+        .json({ message: 'Failed to get Discord user.' });
     }
+  }
+
+  @Get('/trades')
+  async getUserTrades(
+    @Req() request: Request,
+    @Query() query: GetGuildUserDTO,
+    @Res() response: Response,
+  ) {
+    const personal_trades = await prisma.guildTrade.findMany({
+      where: {
+        guild_id: query.guild_id,
+        user_id: query.user_id,
+      },
+    });
+    const partner_trades = await prisma.guildTrade.findMany({
+      where: {
+        guild_id: query.guild_id,
+        partner_id: query.user_id,
+      },
+    });
+    const final_array = partner_trades.concat(personal_trades);
+    return response.status(200).json(final_array);
   }
 }

@@ -65,9 +65,9 @@ public class MemberJoin extends ListenerAdapter {
       if (channel == null)
         return;
 
-      String final_message = welcome_parsed.welcome.replace("{username}", "<@" + user.getId() + ">");
+      String final_message = welcome_parsed.welcome.replace("{username}", "<@" + user.getUser().getId() + ">");
       final_message = final_message.replace("{guild}", guild.getName());
-      final_message = final_message.replace("{count}", String.valueOf(guild.getMembers().size() + 1));
+      final_message = final_message.replace("{count}", String.valueOf(guild.getMembers().size() + 2));
 
       channel.sendMessage(final_message).queue();
     } catch (IOException ex) {

@@ -160,10 +160,10 @@ const IndexClient = (props: { user: UserDTO | null }) => {
         <section style={{ width: "50%" }}>
           <h1>Is there any P2W?</h1>
           <p>
-            Vaultonix does contain P2W mechanics and rewards; however, they are
-            also accessible by just checking Vaultonix every once and a while.
-            For example, 5 1-day XP booster is $2 or you can spend 10,000
-            credits.
+            Vaultonix&apos;s is fully functional without <span className="rainbow" style={{"fontWeight": "700"}}>Premium</span>.
+            Premium only offers additional modules (i.e. global trading) and benefits (i.e. supply drops). Early access features, 
+            like Battles, are behind <span className="rainbow" style={{"fontWeight": "700", "animationDelay": "0.5s"}}>Premium</span> because
+            those features aren&apos;t fully fleshed out and stable for the general public.
           </p>
         </section>
         <section

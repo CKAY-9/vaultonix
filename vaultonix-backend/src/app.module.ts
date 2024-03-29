@@ -9,6 +9,7 @@ import { GuildModule } from './api/guild/guild.module';
 import { DiscordModule } from './api/discord/discord.module';
 import { NewsModule } from './api/news/news.module';
 import { StoreModule } from './api/store/store.module';
+import { TradeModule } from './api/trade/trade.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { StoreModule } from './api/store/store.module';
     DiscordModule,
     NewsModule,
     StoreModule,
+    TradeModule,
     RouterModule.register([
       {
         // /api/v1
@@ -66,6 +68,10 @@ import { StoreModule } from './api/store/store.module';
             path: 'store',
             module: StoreModule,
           },
+          {
+            path: 'trade',
+            module: TradeModule
+          }
         ],
       },
     ]),

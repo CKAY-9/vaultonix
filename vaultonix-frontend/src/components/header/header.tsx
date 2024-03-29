@@ -95,6 +95,7 @@ const Header = (props: { user: UserDTO | null }) => {
               style={{ width: "2px", height: "auto", background: "white" }}
             ></div>
             <Link href="/vaultonix/inventory">Inventory</Link>
+            <Link href="/vaultonix/trade">Trades</Link>
             <Link href="/vaultonix/item-store">Item Store</Link>
             <Link href="/vaultonix/auction">Auction House</Link>
             <div

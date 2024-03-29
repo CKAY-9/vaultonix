@@ -76,7 +76,7 @@ public class Helpers {
     }
 
     if (channel != null) {
-      channel.sendMessage("Congrats <@" + guild.getId() + ">, you reached Level " + new_level + "!").queue();
+      channel.sendMessage("Congrats <@" + guild_member.getId() + ">, you reached Level " + new_level + "!").queue();
     }
   }
 

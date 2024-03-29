@@ -4,9 +4,7 @@ import VaultonixClient from "./client";
 export const generateMetadata = (): Metadata => {
   return {
     title: "App - Vaultonix",
-    openGraph: {
-      images: ["/Banner.png"],
-    },
+    description: "Manage your Vaultonix expierence."
   };
 };
 

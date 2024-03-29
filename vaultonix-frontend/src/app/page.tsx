@@ -6,9 +6,7 @@ import { getServerCookie } from "@/api/server-cookies";
 export const generateMetadata = (): Metadata => {
   return {
     title: "Home - Vaultonix",
-    openGraph: {
-      images: ["/Banner.png"],
-    },
+    description: "Learn about Vaultonix and what is offers."
   };
 };
 
