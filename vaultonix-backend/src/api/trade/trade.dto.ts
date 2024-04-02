@@ -3,3 +3,7 @@ export interface NewTradeDTO {
   partner_id: string;
   guild_id: string;
 }
+
+export interface GetTradeDTO {
+  trade_id: number;
+}

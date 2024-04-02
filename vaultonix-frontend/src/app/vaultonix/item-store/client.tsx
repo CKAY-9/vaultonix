@@ -98,9 +98,7 @@ const ItemStoreClient = () => {
             <div className={style.items}>
               {store_items.map((item: StoreEntryDTO, index: number) => {
                 return (
-                  <Link href={`/vaultonix/item-store/${item.id}`} key={index}>
-                    <ItemPreview item={item} />
-                  </Link>
+                  <ItemPreview item={item} />
                 );
               })}
             </div>

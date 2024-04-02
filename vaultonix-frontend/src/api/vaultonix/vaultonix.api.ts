@@ -1,6 +1,11 @@
 import axios from "axios";
 import { API_URL } from "../resources";
-import { LevelRewardsDTO, TriviaDTO, WelcomeGoodbyeDTO } from "./vaultonix.dto";
+import {
+  LevelRewardsDTO,
+  TradeDTO,
+  TriviaDTO,
+  WelcomeGoodbyeDTO,
+} from "./vaultonix.dto";
 import { GuildUserDTO } from "../user/user.dto";
 
 export const updateAutoRolesForGuild = async (
@@ -30,14 +35,14 @@ export const getGuildUsers = async (
       url: API_URL + "/guild/users",
       method: "GET",
       params: {
-        guild_id
-      }
+        guild_id,
+      },
     });
-    return response.data
+    return response.data;
   } catch (ex) {
     return [];
   }
-}
+};
 
 export const getWelcomeGoodbyeForGuild = async (
   guild_id: string
@@ -48,6 +53,23 @@ export const getWelcomeGoodbyeForGuild = async (
       method: "GET",
       params: {
         guild_id: guild_id,
+      },
+    });
+    return request.data;
+  } catch (ex) {
+    return null;
+  }
+};
+
+export const getTradeFromID = async (
+  trade_id: number,
+): Promise<TradeDTO | null> => {
+  try {
+    const request = await axios({
+      url: API_URL + "/trade",
+      method: "GET",
+      params: {
+        trade_id,
       },
     });
     return request.data;
@@ -125,11 +147,11 @@ export const getTrivia = async (
       url: API_URL + "/guild/trivia",
       method: "GET",
       params: {
-        guild_id
-      }
+        guild_id,
+      },
     });
     return request.data;
   } catch (ex) {
     return null;
   }
-}
+};

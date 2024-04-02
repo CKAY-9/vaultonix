@@ -18,6 +18,7 @@ import Header from "@/components/header/header";
 import Loading from "@/components/loading/loading";
 import AutoRolesModule from "@/components/modules/auto-roles/auto-roles";
 import LevelRewardsModule from "@/components/modules/level-rewards/level-rewards";
+import LoggingModule from "@/components/modules/logging/logging";
 import TriviaModule from "@/components/modules/trivia/trivia";
 import WelcomeGoodbyeModule from "@/components/modules/welcome-goodbye/welcome-goodbye";
 import { getCookie } from "@/utils/cookie";
@@ -118,6 +119,11 @@ const GuildDashboardClient = (props: { guild_id: string }) => {
               guild_id={props.guild_id}
               guild_channels={channels}
             />
+          </div>
+        </div>
+        <div className="grid">
+          <div className="item">
+            <LoggingModule guild_id={props.guild_id} />
           </div>
         </div>
         <div className="grid" style={{ gridTemplateColumns: "auto 55%" }}>
