@@ -11,6 +11,7 @@ import {
 import { Response, Request, response } from 'express';
 import { GetNewsArticleDTO, NewNewsArticleDTO } from './news.dto';
 import { prisma } from '../prisma';
+import { getUserFromToken, getUserStaffPerms } from '../user/user.utils';
 
 @Controller('')
 export class NewsController {
@@ -20,6 +21,22 @@ export class NewsController {
     @Body() body: NewNewsArticleDTO,
     @Res() response: Response,
   ) {
+    const token = request.headers.authorization;
+    if (token === null) {
+      return response.status(HttpStatus.BAD_REQUEST).json({message: "Failed to get token."});
+    }
+
+    const user = await getUserFromToken(token);
+    if (user === null) {
+      return response.status(HttpStatus.NOT_FOUND).json({message: "Failed to get user."});
+    }
+
+    const staff = await getUserStaffPerms(user.id);
+    // TODO: check specific staff perms
+    if (staff === null) {
+      return response.status(HttpStatus.UNAUTHORIZED).json({message: "Invalid staff permissions"});
+    }
+
     const insert = await prisma.newsArticle.create({
       data: {
         title: body.title,

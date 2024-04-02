@@ -45,3 +45,12 @@ export interface TradeDTO {
   completed: Date;
   guild_id: string;
 }
+
+export interface GuildLoggingDTO {
+  id: number;
+  guild_id: string;
+  channel_id: string;
+  enabled: boolean;
+  robust: boolean;
+  actions_to_log: string;
+}

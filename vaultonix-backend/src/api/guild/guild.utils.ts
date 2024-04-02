@@ -83,19 +83,51 @@ export const getLevelRewards = async (guild_id: string): Promise<GuildLevelRewar
       guild_id: guild_id
     }
   });
-  return level_rewards;
+  if (level_rewards !== null) {
+    return level_rewards;
+  }
+  const init = await initializeLevelRewards(guild_id);
+  return init;
 }
 
-export const getGuildTriviaWithID = async (guild_id: string) => {
-  const trivia = await prisma.guildTrivia.findFirst({
+export const initializeTrivia = async (guild_id: string) => {
+  const insert = await prisma.guildTrivia.create({
+    data: {
+      guild_id
+    }
+  });
+  return insert;
+}
+
+export const initializeGuildLogging = async (
+  guild_id: string
+) => {
+  const insert = await prisma.guildLogging.create({
+    data: {
+      guild_id,
+    }
+  });
+  return insert;
+}
+
+export const getLogging = async (
+  guild_id: string
+) => {
+  const check = await prisma.guildLogging.findFirst({
     where: {
       guild_id
     }
   });
-  return trivia;
+  if (check !== null) {
+    return check;
+  }
+  const init = await initializeGuildLogging(guild_id);
+  return init;
 }
 
-export const initializeTrivia = async (guild_id: string) => {
+export const getTrivia = async (
+  guild_id: string
+) => {
   const check = await prisma.guildTrivia.findFirst({
     where: {
       guild_id
@@ -104,11 +136,58 @@ export const initializeTrivia = async (guild_id: string) => {
   if (check !== null) {
     return check;
   }
+  const init = await initializeTrivia(guild_id);
+  return init;
+}
 
-  const insert = await prisma.guildTrivia.create({
-    data: {
+export const getWelcomeGoodbye = async (
+  guild_id: string
+) => {
+  const check = await prisma.guildWelcomeGoodbye.findFirst({
+    where: {
       guild_id
     }
   });
-  return insert;
+  if (check !== null) {
+    return check;
+  }
+  const init = await initializeWelcomeGoodbye(guild_id);
+  return init;
+}
+
+export const getGuildSettings = async (
+  guild_id: string
+) => {
+  const check = await prisma.guildSettings.findFirst({
+    where: {
+      guild_id
+    }
+  });
+  if (check !== null) {
+    return check;
+  }
+  const init = (await initializeServerData(guild_id)).config;
+  return init;
+}
+
+export const getGuild = async (
+  guild_id: string
+) => {
+  const guild = await prisma.guilds.findFirst({
+    where: {
+      guild_id: guild_id || '',
+    },
+  });
+  if (guild === null) {
+    return null;
+  }
+  const config = await prisma.guildSettings.findFirst({
+    where: {
+      guild_id: guild_id,
+    },
+  });
+  if (config === null) {
+    await initializeServerData(guild_id);
+  }
+  return guild;
 }

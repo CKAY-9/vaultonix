@@ -9,11 +9,11 @@ import {
   Req,
   Res,
 } from '@nestjs/common';
-import { Response, Request, response } from 'express';
+import { Response, Request, response, query } from 'express';
 import { prisma } from '../prisma';
 import { getStoreItemFromID, initializeStoreData } from './store.utils';
 import { BuyItemDTO, GetStoreItemDTO, NewStoreItemDTO } from './store.dto';
-import { addXPToUser } from '../user/user.utils';
+import { addXPToUser, getGuildUserFromID, getUserFromToken } from '../user/user.utils';
 
 @Controller('')
 export class StoreController {
@@ -73,11 +73,7 @@ export class StoreController {
     @Res() response: Response,
   ) {
     try {
-      const item = await prisma.itemStoreEntry.findFirst({
-        where: {
-          id: Number.parseInt(query.item_id.toString()),
-        },
-      });
+      const item = await getStoreItemFromID(query.item_id);
       if (item === null) {
         return response
           .status(HttpStatus.NOT_FOUND)
@@ -117,21 +113,12 @@ export class StoreController {
       return response.status(HttpStatus.BAD_REQUEST).json({message: "Failed to get token."});
     }
 
-    const user = await prisma.users.findFirst({
-      where: {
-        token
-      }
-    });
+    const user = await getUserFromToken(token);
     if (user === null) {
-      return response.status(HttpStatus.UNAUTHORIZED).json({message: "Failed to get user."});
+      return response.status(HttpStatus.NOT_FOUND).json({message: "Failed to get user."});
     }
 
-    const guild_user = await prisma.guildUsers.findFirst({
-      where: {
-        guild_id: body.guild_id,
-        user_id: body.user_id,
-      }
-    });
+    const guild_user = await getGuildUserFromID(body.guild_id, user.id.toString());
     if (guild_user === null) {
       return response.status(HttpStatus.NOT_FOUND).json({message: "Failed to get guild user."});
     }

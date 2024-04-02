@@ -14,19 +14,23 @@ import {
   GuildIDDTO,
   UpdateAutoRolesDTO,
   UpdateLevelRewardsDTO,
+  UpdateTriviaQuestions,
   UpdateWelcomeGoodbyeDTO,
 } from './guild.dto';
 import { GetGuildDTO } from '../bot/bot.dto';
 import {
-  getGuildTriviaWithID,
+  getGuild,
+  getGuildSettings,
   getLevelRewards,
-  initializeLevelRewards,
+  getLogging,
+  getTrivia,
+  getWelcomeGoodbye,
   initializeServerData,
-  initializeTrivia,
   initializeWelcomeGoodbye,
 } from './guild.utils';
 import axios from 'axios';
 import { DISCORD_API } from 'src/resources';
+import { GuildLogging } from '@prisma/client';
 
 @Controller('')
 export class GuildController {
@@ -37,23 +41,11 @@ export class GuildController {
     @Res() response: Response,
   ) {
     try {
-      const guild = await prisma.guilds.findFirst({
-        where: {
-          guild_id: query.guild_id || '',
-        },
-      });
+      let guild = await getGuild(query.guild_id);
       if (guild === null) {
-        return response.status(HttpStatus.NOT_FOUND).json({
-          message: 'Guild is not active with the power of Vaultonix.',
-        });
-      }
-      const config = await prisma.guildSettings.findFirst({
-        where: {
-          guild_id: query.guild_id,
-        },
-      });
-      if (config === null) {
-        await initializeServerData(query.guild_id);
+        return response
+          .status(HttpStatus.NOT_FOUND)
+          .json({ message: 'Failed to get guild.' });
       }
       return response.status(HttpStatus.OK).json(guild);
     } catch (ex) {
@@ -82,15 +74,7 @@ export class GuildController {
     @Query() query: GuildIDDTO,
     @Res() res: Response,
   ) {
-    let config = await prisma.guildSettings.findFirst({
-      where: {
-        guild_id: query.guild_id,
-      },
-    });
-    if (config === null) {
-      const re = await initializeServerData(query.guild_id);
-      config = re.config;
-    }
+    let config = await getGuildSettings(query.guild_id);
     return res.status(200).json(config);
   }
 
@@ -126,20 +110,7 @@ export class GuildController {
     @Body() body: UpdateAutoRolesDTO,
     @Res() response: Response,
   ) {
-    let guild = await prisma.guildSettings.findFirst({
-      where: {
-        guild_id: body.guild_id,
-      },
-    });
-    if (guild === null) {
-      await initializeServerData(body.guild_id);
-      guild = await prisma.guildSettings.findFirst({
-        where: {
-          guild_id: body.guild_id,
-        },
-      });
-    }
-
+    let guild = await getGuildSettings(body.guild_id);
     const update = await prisma.guildSettings.update({
       where: {
         guild_id: body.guild_id,
@@ -158,15 +129,7 @@ export class GuildController {
     @Query() query: GetGuildDTO,
     @Res() response: Response,
   ) {
-    let guild_welcome_goodbye = await prisma.guildWelcomeGoodbye.findFirst({
-      where: {
-        guild_id: query.guild_id,
-      },
-    });
-    if (guild_welcome_goodbye === null) {
-      guild_welcome_goodbye = await initializeWelcomeGoodbye(query.guild_id);
-    }
-
+    let guild_welcome_goodbye = await getWelcomeGoodbye(query.guild_id);
     return response.status(200).json(guild_welcome_goodbye);
   }
 
@@ -176,15 +139,7 @@ export class GuildController {
     @Body() body: UpdateWelcomeGoodbyeDTO,
     @Res() response: Response,
   ) {
-    let guild_welcome_goodbye = await prisma.guildWelcomeGoodbye.findFirst({
-      where: {
-        guild_id: body.guild_id,
-      },
-    });
-    if (guild_welcome_goodbye === null) {
-      guild_welcome_goodbye = await initializeWelcomeGoodbye(body.guild_id);
-    }
-
+    let guild_welcome_goodbye = await getWelcomeGoodbye(body.guild_id);
     const update = await prisma.guildWelcomeGoodbye.update({
       where: {
         id: guild_welcome_goodbye.id,
@@ -216,15 +171,7 @@ export class GuildController {
     @Res() response: Response,
   ) {
     try {
-      let levels = await prisma.guildLevelRewards.findFirst({
-        where: {
-          guild_id: body.guild_id,
-        },
-      });
-      if (levels === null) {
-        levels = await initializeLevelRewards(body.guild_id);
-      }
-
+      let levels = await getLevelRewards(body.guild_id);
       const update = await prisma.guildLevelRewards.update({
         where: {
           guild_id: body.guild_id,
@@ -252,10 +199,10 @@ export class GuildController {
     try {
       const request = await axios({
         url: DISCORD_API + `/guilds/${query.guild_id}`,
-        method: "GET",
+        method: 'GET',
         headers: {
-          Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}`
-        }
+          Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}`,
+        },
       });
       return response.status(200).json(request.data);
     } catch (ex) {
@@ -269,10 +216,43 @@ export class GuildController {
     @Query() query: GetGuildDTO,
     @Res() response: Response,
   ) {
-    let trivia = await getGuildTriviaWithID(query.guild_id);
-    if (trivia === null) {
-      trivia = await initializeTrivia(query.guild_id);
-    }
+    let trivia = await getTrivia(query.guild_id);
     return response.status(200).json(trivia);
+  }
+
+  @Put('/trivia')
+  async updateTrivia(
+    @Req() request: Request,
+    @Body() body: UpdateTriviaQuestions,
+    @Res() response: Response,
+  ) {
+    let trivia = await getTrivia(body.guild_id);
+    let update = await prisma.guildTrivia.update({
+      where: {
+        guild_id: body.guild_id,
+        id: trivia.id,
+      },
+      data: body.trivia,
+    });
+    return response.status(200).json(update);
+  }
+
+  @Get('/logging')
+  async getGuildLogging(
+    @Req() request: Request,
+    @Query() query: GetGuildDTO,
+    @Res() response: Response,
+  ) {
+    let logging = await getLogging(query.guild_id);
+    return response.status(200).json(logging);
+  }
+
+  @Put('/logging')
+  async updateGuildLogging(
+    @Req() request: Request,
+    @Body() body: GuildLogging,
+    @Res() response: Response,
+  ) {
+    let logging = await getLogging(body.guild_id);
   }
 }

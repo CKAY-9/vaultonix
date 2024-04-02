@@ -1,16 +1,31 @@
 "use client";
 
-import { getTrivia } from "@/api/vaultonix/vaultonix.api";
+import { getTrivia, updateTriviaQuestions } from "@/api/vaultonix/vaultonix.api";
 import { TriviaDTO, TriviaQuestionDTO } from "@/api/vaultonix/vaultonix.dto";
 import { BaseSyntheticEvent, useEffect, useState } from "react";
 import style from "./trivia.module.scss";
 
-const Question = (props: { question: TriviaQuestionDTO }) => {
+const Question = (props: {
+  question: TriviaQuestionDTO;
+  index: number;
+  on_change: any;
+  on_delete: any;
+}) => {
   const [prompt, setPrompt] = useState<string>(props.question.prompt);
   const [answers, setAnswers] = useState<string[]>(props.question.answers);
   const [correct_answer, setCorrectAnswer] = useState<number>(
     props.question.correct_answer
   );
+  const [credits, setCredits] = useState<number>(0);
+
+  useEffect(() => {
+    props.on_change(props.index, {
+      prompt,
+      answers,
+      correct_answer,
+      credits_reward: credits
+    });
+  }, [prompt, answers, correct_answer]);
 
   return (
     <div className={style.question}>
@@ -25,11 +40,25 @@ const Question = (props: { question: TriviaQuestionDTO }) => {
       {answers.map((answer, index) => {
         return (
           <section key={index}>
-            <button onClick={() => setCorrectAnswer(index)} style={{"backgroundColor": index === correct_answer ? "var(--accent-400)" : "var(--primary-700)"}}>Answer #{index + 1}</button>
-            <input onChange={(e: BaseSyntheticEvent) => {
-              answers[index] = e.target.value;
-              setAnswers(answers);
-            }} type="text" placeholder={`Answer #${index + 1}`} />
+            <button
+              onClick={() => setCorrectAnswer(index)}
+              style={{
+                backgroundColor:
+                  index === correct_answer
+                    ? "var(--accent-400)"
+                    : "var(--primary-700)",
+              }}
+            >
+              Answer #{index + 1}
+            </button>
+            <input
+              onChange={(e: BaseSyntheticEvent) => {
+                answers[index] = e.target.value;
+                setAnswers(answers);
+              }}
+              type="text"
+              placeholder={`Answer #${index + 1}`}
+            />
           </section>
         );
       })}
@@ -38,11 +67,17 @@ const Question = (props: { question: TriviaQuestionDTO }) => {
           (Click which question is the right one)
         </span>
       )}
-      <button style={{"width": "fit-content"}} onClick={() => setAnswers((old) => [...old, ""])}>Add Answer</button>
+      <button
+        style={{ width: "fit-content" }}
+        onClick={() => setAnswers((old) => [...old, ""])}
+      >
+        Add Answer
+      </button>
       <section>
         <label>Credits Reward</label>
-        <input type="number" min={0} max={100_000_000} placeholder="Credits" />
+        <input onChange={(e: BaseSyntheticEvent) => setCredits(e.target.value)} type="number" min={0} max={100_000_000} placeholder="Credits" />
       </section>
+      <button onClick={() => props.on_delete(props.index)}>Remove</button>
     </div>
   );
 };
@@ -64,6 +99,38 @@ export const TriviaModule = (props: { guild_id: string }) => {
     })();
   }, [props.guild_id]);
 
+  const updateTrivia = async (e: BaseSyntheticEvent) => {
+    e.preventDefault();
+    if (trivia === null) return;
+
+    const update = await updateTriviaQuestions(props.guild_id, trivia);
+  }
+
+  const editQuestion = (index: number, question: TriviaQuestionDTO) => {
+    if (trivia === null) return;
+
+    questions[index] = question;
+    setQuestions(questions);
+    setTrivia({
+      enabled: trivia.enabled,
+      guild_id: trivia.guild_id,
+      id: trivia.id,
+      questions: JSON.stringify(questions)
+    });
+  };
+
+  const removeQuestion = (index: number) => {
+    if (trivia === null) return;
+
+    setQuestions((qs) => qs.filter((question, i) => index !== i));
+    setTrivia({
+      enabled: trivia.enabled,
+      guild_id: trivia.guild_id,
+      id: trivia.id,
+      questions: JSON.stringify(questions)
+    });
+  };
+
   if (trivia === null || loading) {
     return <h3>Loading...</h3>;
   }
@@ -74,7 +141,15 @@ export const TriviaModule = (props: { guild_id: string }) => {
       <span>Reward users for getting correct answers to Trivia questions</span>
       {questions.length <= 0 && <span>You have no questions setup...</span>}
       {questions.map((question, index) => {
-        return <Question key={index} question={question} />;
+        return (
+          <Question
+            index={index}
+            on_change={editQuestion}
+            on_delete={removeQuestion}
+            key={index}
+            question={question}
+          />
+        );
       })}
       <button
         onClick={() => {
@@ -91,7 +166,7 @@ export const TriviaModule = (props: { guild_id: string }) => {
       >
         New Question
       </button>
-      <button>Update</button>
+      <button onClick={updateTrivia}>Update</button>
     </>
   );
 };
