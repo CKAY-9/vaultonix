@@ -22,7 +22,15 @@ export interface UpdateLevelRewardsDTO {
   level_rewards: GuildLevelRewards;
 }
 
-export interface UpdateTriviaQuestions {
+export interface UpdateTriviaQuestionsDTO {
   guild_id: string;
   trivia: GuildTrivia
+}
+
+export interface NewEventLogDTO {
+  guild_id: string;
+  message: string;
+  user_ids: string[];
+  channel_id: string;
+  type: number; // Enum
 }

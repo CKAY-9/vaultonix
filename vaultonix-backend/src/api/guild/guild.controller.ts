@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   HttpStatus,
+  Post,
   Put,
   Query,
   Req,
@@ -14,7 +15,7 @@ import {
   GuildIDDTO,
   UpdateAutoRolesDTO,
   UpdateLevelRewardsDTO,
-  UpdateTriviaQuestions,
+  UpdateTriviaQuestionsDTO,
   UpdateWelcomeGoodbyeDTO,
 } from './guild.dto';
 import { GetGuildDTO } from '../bot/bot.dto';
@@ -223,7 +224,7 @@ export class GuildController {
   @Put('/trivia')
   async updateTrivia(
     @Req() request: Request,
-    @Body() body: UpdateTriviaQuestions,
+    @Body() body: UpdateTriviaQuestionsDTO,
     @Res() response: Response,
   ) {
     let trivia = await getTrivia(body.guild_id);
@@ -254,5 +255,29 @@ export class GuildController {
     @Res() response: Response,
   ) {
     let logging = await getLogging(body.guild_id);
+  }
+
+  @Post('/logging')
+  async logEvent(
+    @Req() request: Request,
+    @Body() body,
+    @Res() response: Response,
+  ) {
+    const token = request.headers.authorization;
+    if (token === null) {
+      return response
+        .status(HttpStatus.BAD_REQUEST)
+        .json({ message: 'Failed to get token.' });
+    }
+
+    const is_bot = token === process.env.BOT_AUTH_KEY;
+    if (!is_bot) {
+      return response
+        .status(HttpStatus.UNAUTHORIZED)
+        .json({ message: 'Invalid auth key.' });
+    }
+
+    const guild_logging = await getLogging(body.guild_id);
+    // TODO: log event on web
   }
 }

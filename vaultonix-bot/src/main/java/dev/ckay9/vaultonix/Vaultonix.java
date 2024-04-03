@@ -7,6 +7,7 @@ import dev.ckay9.vaultonix.Events.GuildJoin;
 import dev.ckay9.vaultonix.Events.MemberJoin;
 import dev.ckay9.vaultonix.Events.MemberLeave;
 import dev.ckay9.vaultonix.Events.MessageReceived;
+import dev.ckay9.vaultonix.Events.Logs.Logs;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -60,8 +61,10 @@ public class Vaultonix {
         new MemberLeave(),
         new MessageReceived(),
         new BotReady(),
-        new CommandHandler()
+        new CommandHandler(),
+        new Logs()
       );
+
       builder.setActivity(Activity.watching("over you..."));
       JDA jda = builder.build().awaitReady();
       BotCommands.addGlobalCommands(jda);
