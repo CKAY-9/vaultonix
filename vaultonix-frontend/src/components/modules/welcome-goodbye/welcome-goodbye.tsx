@@ -5,11 +5,9 @@ import {
   getWelcomeGoodbyeForGuild,
   updateWelcomeGoodbyeForGuild,
 } from "@/api/vaultonix/vaultonix.api";
+import ChannelDropdown from "@/components/channel-dropdown/channel-dropdown";
 
-const WelcomeGoodbyeModule = (props: {
-  guild_id: string;
-  guild_channels: GuildChannelDTO[];
-}) => {
+const WelcomeGoodbyeModule = (props: { guild_id: string }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [welcome, setWelcome] = useState<string>("");
   const [goodbye, setGoodbye] = useState<string>("");
@@ -46,13 +44,17 @@ const WelcomeGoodbyeModule = (props: {
     return <h3>Loading...</h3>;
   }
 
+  const onChange = (channel_id: string) => {
+    setChannel(channel_id);
+  };
+
   return (
     <>
       <h3>Welcome/Goodbye Message</h3>
       <span>
         Say welcome or goodbye to users joining and leaving your server
       </span>
-      <label>Welcome</label>
+      <h4>Welcome</h4>
       <textarea
         defaultValue={welcome}
         onChange={(e: BaseSyntheticEvent) => setWelcome(e.target.value)}
@@ -60,7 +62,7 @@ const WelcomeGoodbyeModule = (props: {
         cols={30}
         rows={2}
       ></textarea>
-      <label>Goodbye</label>
+      <h4>Goodbye</h4>
       <textarea
         defaultValue={goodbye}
         onChange={(e: BaseSyntheticEvent) => setGoodbye(e.target.value)}
@@ -68,38 +70,7 @@ const WelcomeGoodbyeModule = (props: {
         cols={30}
         rows={2}
       ></textarea>
-      <select
-        defaultValue={channel}
-        onChange={(e: BaseSyntheticEvent) => setChannel(e.target.value)}
-      >
-        {channel !== "" ? (
-          <>
-            {props.guild_channels
-              .filter((c) => c.type === 0)
-              .map((c, index) => {
-                return (
-                  <option key={index} value={c.id}>
-                    #{c.name}
-                  </option>
-                );
-              })}
-            <option value="">SELECT CHANNEL</option>
-          </>
-        ) : (
-          <>
-            <option value="">SELECT CHANNEL</option>
-            {props.guild_channels
-              .filter((channel) => channel.type === 0)
-              .map((channel, index) => {
-                return (
-                  <option key={index} value={channel.id}>
-                    #{channel.name}
-                  </option>
-                );
-              })}
-          </>
-        )}
-      </select>
+      <ChannelDropdown on_change={onChange} guild_id={props.guild_id} />
       <button onClick={update}>Update</button>
     </>
   );

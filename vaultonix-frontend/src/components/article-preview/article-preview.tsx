@@ -33,7 +33,7 @@ const ArticlePreview = (props: {
     <div className={style.article}>
       <h2>{props.article.title}</h2>
       <span>{props.article.body.slice(0, 100)}...</span>
-      <section style={{"display": "flex", "gap": "1rem"}}>
+      <section style={{"display": "flex", "gap": "1rem", "opacity": "0.5"}}>
         <span>Posted by <Link className={author.supporter ? "rainbow" : ""} style={{"fontWeight": author.supporter ? "700" : "400"}} href={`/vaultonix/user/${author.id}`}>{author.username}</Link></span>
         <span>Posted on {new Date(props.article.posted).toLocaleDateString()}</span>
       </section>

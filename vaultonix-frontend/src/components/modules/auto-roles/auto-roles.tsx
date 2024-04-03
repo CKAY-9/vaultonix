@@ -59,7 +59,7 @@ const AutoRolesModule = (props: {
         Auto-assign roles to users when they join your server (moving roles will
         automatically update them)
       </span>
-      <label>Auto Roles</label>
+      <h4>Auto Roles</h4>
       <div className={style.roles}>
         {auto_roles.length <= 0 && (
           <div className={style.role}>No Auto-Roles Assigned...</div>

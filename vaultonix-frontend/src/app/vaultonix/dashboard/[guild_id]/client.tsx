@@ -20,6 +20,7 @@ import AutoRolesModule from "@/components/modules/auto-roles/auto-roles";
 import LevelRewardsModule from "@/components/modules/level-rewards/level-rewards";
 import LoggingModule from "@/components/modules/logging/logging";
 import TriviaModule from "@/components/modules/trivia/trivia";
+import WarnsModule from "@/components/modules/warns/warns";
 import WelcomeGoodbyeModule from "@/components/modules/welcome-goodbye/welcome-goodbye";
 import { getCookie } from "@/utils/cookie";
 import Image from "next/image";
@@ -32,7 +33,6 @@ const GuildDashboardClient = (props: { guild_id: string }) => {
   const [guild, setGuild] = useState<GuildDTO | null>(null);
   const [is_active, setIsActive] = useState<boolean>(false);
   const [config, setConfig] = useState<GuildSettingsDTO | null>(null);
-  const [channels, setChannels] = useState<GuildChannelDTO[]>([]);
 
   useEffect(() => {
     (async () => {
@@ -64,7 +64,6 @@ const GuildDashboardClient = (props: { guild_id: string }) => {
 
       setUser(u);
       setConfig(conf);
-      setChannels(chnls);
       setLoading(false);
     })();
   }, [props.guild_id]);
@@ -117,13 +116,15 @@ const GuildDashboardClient = (props: { guild_id: string }) => {
           <div className="item">
             <WelcomeGoodbyeModule
               guild_id={props.guild_id}
-              guild_channels={channels}
             />
           </div>
         </div>
-        <div className="grid">
+        <div className="grid" style={{ gridTemplateColumns: "60% auto" }}>
           <div className="item">
             <LoggingModule guild_id={props.guild_id} />
+          </div>
+          <div className="item">
+            <WarnsModule />
           </div>
         </div>
         <div className="grid" style={{ gridTemplateColumns: "auto 55%" }}>

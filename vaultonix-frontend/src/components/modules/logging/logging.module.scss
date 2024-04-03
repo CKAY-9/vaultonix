@@ -1,0 +1,12 @@
+.events {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+
+  .event {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+}
