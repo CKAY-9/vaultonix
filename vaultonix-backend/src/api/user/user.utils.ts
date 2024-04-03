@@ -1,6 +1,7 @@
 import { GuildLevelRewards, GuildUsers, Staff, Users } from '@prisma/client';
 import { prisma } from '../prisma';
-import { getLevelRewards, initializeServerData } from '../guild/guild.utils';
+import { getGuild, getLevelRewards, initializeServerData } from '../guild/guild.utils';
+import { Request } from 'express';
 
 export const initializeGuildUser = async (
   guild_id: string,
@@ -114,6 +115,29 @@ export const getGuildUserFromID = async (
       }
     });
     return user;
+  } catch (ex) {
+    return null;
+  }
+}
+
+export const getGuildOwner = async (
+  request: Request,
+  guild_id: string
+): Promise<Users | null> => {
+  try {
+    const token = request.headers.authorization;
+    if (token === null) return null;
+
+    const user = await getUserFromToken(token);
+    if (user === null) return null;
+
+    const guild_request = await getGuild(guild_id);
+    if (guild_request === null) return null;
+
+    if (guild_request.guild_owner == user.discord_id) {
+      return user;
+    }
+    return null;
   } catch (ex) {
     return null;
   }

@@ -2,7 +2,6 @@ package dev.ckay9.vaultonix.Events;
 
 import org.apache.http.Header;
 import org.apache.http.HttpHeaders;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.message.BasicHeader;
 
 import dev.ckay9.vaultonix.Vaultonix;
@@ -26,10 +25,9 @@ public class GuildJoin extends ListenerAdapter {
     req_data.guild_name = guild.getName();
     req_data.guild_owner = guild.getOwnerId();
 
-    CloseableHttpResponse response = HTTP.postRequest((Object) req_data, Vaultonix.API_HOST + "/bot/guild",
+    HTTP.postRequest((Object) req_data, Vaultonix.API_HOST + "/bot/guild",
       new Header[] {
         new BasicHeader(HttpHeaders.AUTHORIZATION, Vaultonix.BOT_AUTH_KEY)
-        });
-    System.out.println(response.toString());
+      });
   }
 }

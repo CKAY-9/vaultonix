@@ -9,7 +9,7 @@ import {
   Req,
   Res,
 } from '@nestjs/common';
-import { Response, Request, response, query } from 'express';
+import { Response, Request } from 'express';
 import { prisma } from '../prisma';
 import {
   GuildIDDTO,
@@ -26,12 +26,11 @@ import {
   getLogging,
   getTrivia,
   getWelcomeGoodbye,
-  initializeServerData,
-  initializeWelcomeGoodbye,
 } from './guild.utils';
 import axios from 'axios';
 import { DISCORD_API } from 'src/resources';
 import { GuildLogging } from '@prisma/client';
+import { getGuildOwner } from '../user/user.utils';
 
 @Controller('')
 export class GuildController {
@@ -111,6 +110,13 @@ export class GuildController {
     @Body() body: UpdateAutoRolesDTO,
     @Res() response: Response,
   ) {
+    const user = await getGuildOwner(request, body.guild_id);
+    if (user === null) {
+      return response
+        .status(HttpStatus.UNAUTHORIZED)
+        .json({ message: "Failed to get user." });
+    }
+
     let guild = await getGuildSettings(body.guild_id);
     const update = await prisma.guildSettings.update({
       where: {
@@ -140,6 +146,13 @@ export class GuildController {
     @Body() body: UpdateWelcomeGoodbyeDTO,
     @Res() response: Response,
   ) {
+    const user = await getGuildOwner(request, body.guild_id);
+    if (user === null) {
+      return response
+        .status(HttpStatus.UNAUTHORIZED)
+        .json({ message: "Failed to get user." });
+    }
+
     let guild_welcome_goodbye = await getWelcomeGoodbye(body.guild_id);
     const update = await prisma.guildWelcomeGoodbye.update({
       where: {
@@ -172,6 +185,13 @@ export class GuildController {
     @Res() response: Response,
   ) {
     try {
+      const user = await getGuildOwner(request, body.guild_id);
+      if (user === null) {
+        return response
+          .status(HttpStatus.UNAUTHORIZED)
+          .json({ message: "Failed to get user." });
+      }
+
       let levels = await getLevelRewards(body.guild_id);
       const update = await prisma.guildLevelRewards.update({
         where: {
@@ -227,6 +247,13 @@ export class GuildController {
     @Body() body: UpdateTriviaQuestionsDTO,
     @Res() response: Response,
   ) {
+    const user = await getGuildOwner(request, body.guild_id);
+    if (user === null) {
+      return response
+        .status(HttpStatus.UNAUTHORIZED)
+        .json({ message: "Failed to get user." });
+    }
+
     let trivia = await getTrivia(body.guild_id);
     let update = await prisma.guildTrivia.update({
       where: {
@@ -254,7 +281,23 @@ export class GuildController {
     @Body() body: GuildLogging,
     @Res() response: Response,
   ) {
+    const user = await getGuildOwner(request, body.guild_id);
+    if (user === null) {
+      return response
+        .status(HttpStatus.UNAUTHORIZED)
+        .json({ message: "Failed to get user." });
+    }
+
     let logging = await getLogging(body.guild_id);
+    const update = await prisma.guildLogging.update({
+      where: {
+        guild_id: body.guild_id,
+        id: body.id
+      },
+      data: body
+    });
+    
+    return response.status(200).json(update);
   }
 
   @Post('/logging')

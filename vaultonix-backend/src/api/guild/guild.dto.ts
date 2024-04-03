@@ -20,11 +20,13 @@ export interface UpdateWelcomeGoodbyeDTO {
 export interface UpdateLevelRewardsDTO {
   guild_id: string;
   level_rewards: GuildLevelRewards;
+  enabled: boolean;
 }
 
 export interface UpdateTriviaQuestionsDTO {
   guild_id: string;
   trivia: GuildTrivia
+  enabled: boolean;
 }
 
 export interface NewEventLogDTO {

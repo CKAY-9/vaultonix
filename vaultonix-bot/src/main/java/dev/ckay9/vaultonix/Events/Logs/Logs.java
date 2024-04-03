@@ -53,6 +53,9 @@ public class Logs extends ListenerAdapter {
       if (parsed == null)
         return false;
 
+      if (!parsed.enabled)
+        return false;
+
       Map<String, Boolean> events = gson.fromJson(parsed.actions_to_log, Map.class.getGenericSuperclass());
       if (events == null)
         return false;
