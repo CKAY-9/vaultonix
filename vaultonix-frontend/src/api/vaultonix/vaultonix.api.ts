@@ -1,6 +1,7 @@
 import axios from "axios";
 import { API_URL } from "../resources";
 import {
+  GuildLoggingDTO,
   LevelRewardsDTO,
   TradeDTO,
   TriviaDTO,
@@ -155,3 +156,56 @@ export const getTrivia = async (
     return null;
   }
 };
+
+export const updateTriviaQuestions = async (
+  guild_id: string,
+  trivia: TriviaDTO
+): Promise<boolean> => {
+  try {
+    const request = await axios({
+      url: API_URL + "/guild/trivia",
+      method: "PUT",
+      data: {
+        guild_id,
+        trivia
+      }
+    });
+    return true;
+  } catch (ex) {
+    return false;
+  }
+}
+
+export const getGuildLogging = async (
+  guild_id: string
+): Promise<GuildLoggingDTO | null> => {
+  try {
+    const request = await axios({
+      url: API_URL + "/guild/logging",
+      method: "GET",
+      params: {
+        guild_id
+      }
+    });
+    return request.data;
+  } catch (ex) {
+    return null;
+  }
+}
+
+export const updateGuildLogging = async (
+  logging: GuildLoggingDTO
+): Promise<boolean> => {
+  try {
+    const request = await axios({
+      url: API_URL + "/guild/logging",
+      method: "PUT",
+      data: {
+        logging
+      }
+    });
+    return true;
+  } catch (ex) {
+    return false;
+  }
+}

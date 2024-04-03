@@ -1,4 +1,4 @@
-import { GuildLevelRewards } from "@prisma/client";
+import { GuildLevelRewards, GuildTrivia } from "@prisma/client";
 
 export interface GuildIDDTO {
   guild_id: string;
@@ -20,4 +20,9 @@ export interface UpdateWelcomeGoodbyeDTO {
 export interface UpdateLevelRewardsDTO {
   guild_id: string;
   level_rewards: GuildLevelRewards;
+}
+
+export interface UpdateTriviaQuestions {
+  guild_id: string;
+  trivia: GuildTrivia
 }

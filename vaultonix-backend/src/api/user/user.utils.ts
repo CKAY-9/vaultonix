@@ -1,4 +1,4 @@
-import { GuildLevelRewards, GuildUsers } from '@prisma/client';
+import { GuildLevelRewards, GuildUsers, Staff, Users } from '@prisma/client';
 import { prisma } from '../prisma';
 import { getLevelRewards, initializeServerData } from '../guild/guild.utils';
 
@@ -86,3 +86,50 @@ export const addXPToUser = async (user: GuildUsers, xp_change: number) => {
   });
   return update;
 };
+
+export const getUserFromToken = async (
+  token: string
+): Promise<Users | null> => {
+  try {
+    const user = await prisma.users.findFirst({
+      where: {
+        token
+      }
+    });
+    return user;
+  } catch (ex) {
+    return null;
+  }
+}
+
+export const getGuildUserFromID = async (
+  guild_id: string,
+  user_id: string
+): Promise<GuildUsers | null> => {
+  try {
+    const user = await prisma.guildUsers.findFirst({
+      where: {
+        user_id,
+        guild_id
+      }
+    });
+    return user;
+  } catch (ex) {
+    return null;
+  }
+}
+
+export const getUserStaffPerms = async (
+  user_id: number
+): Promise<Staff | null> => {
+  try {
+    const staff = await prisma.staff.findFirst({
+      where: {
+        user_id
+      }
+    });
+    return staff;
+  } catch (ex) {
+    return null;
+  }
+}
