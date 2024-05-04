@@ -8,7 +8,7 @@ export const initializeStoreData = async () => {
 export const getStoreItemFromID = async (item_id: number) => {
   const item = await prisma.itemStoreEntry.findUnique({
     where: {
-      id: item_id
+      id: Number.parseInt(item_id.toString())
     }
   });
   return item;

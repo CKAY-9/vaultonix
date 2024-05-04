@@ -34,6 +34,7 @@ export const getStoreItem = async (item_id: number): Promise<StoreEntryDTO | nul
     });
     return request.data;
   } catch (ex) {
+    console.log(ex);
     return null;
   }
 }
